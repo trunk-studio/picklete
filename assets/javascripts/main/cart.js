@@ -40,25 +40,21 @@
 
     var tmpPrice = subtotal + buymore - discountAmount;
 
+
+    totalQuantity = 0
+    picklete_cart.orderItems.forEach(function(orderItem, index){
+      totalQuantity += parseInt(orderItem.quantity,10);
+    });
     // 免運
-    // if(parseInt(tmpPrice) >= shippingFeeFreeThreshold){
-    //   $("#shippingFeeField").text('免運');
-    //   shippingFeeFree = true;
-    //   shippingFee = 0;
-    // }else{
-      totalQuantity = 0
-      picklete_cart.orderItems.forEach(function(orderItem, index){
-        totalQuantity += parseInt(orderItem.quantity,10);
-      });
-      shippingFeeFree = false;
+    if(totalQuantity > 1){
+      $("#shippingFeeField").text('免運');
+      shippingFeeFree = true;
       shippingFee = 0;
-      if(totalQuantity == 1){
-        shippingFee = 90;
-      }else{
-        shippingFee = totalQuantity * 60;
-      }
+    }else{
+      shippingFeeFree = false;
+      shippingFee = 60;
       $("#shippingFeeField").text(shippingFee);
-    // }
+    }
 
     packingFee = packingFeeBasic * packingQuantity;
 

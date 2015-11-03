@@ -47,11 +47,12 @@
   });
   var shippingFeePrice = 0;
   if(totalQuantity == 1){
-    shippingFeePrice = 90;
+    shippingFeePrice = 60;
+    $("#shippingFeeField").text(shippingFeePrice);
   }else{
-    shippingFeePrice = totalQuantity * 60;
+    shippingFeePrice = 0;
+    $("#shippingFeeField").text('免運');
   }
-  $("#shippingFeeField").text(shippingFeePrice);
 
   // display packing fee
   var packingFeeField = $('#packingFeeField');

@@ -310,6 +310,7 @@ var self = module.exports = {
       }
 
       // 計算運費
+      let shippingFee = 0;
       let useAllPay = false;
       if(sails.config.useAllPay !== undefined)
           useAllPay = sails.config.useAllPay;
@@ -331,10 +332,12 @@ var self = module.exports = {
         }
       }else{
         sails.log.info("=== quantity ===",thisOrder.quantity);
-        if(thisOrder.quantity == 1)
-          thisOrder.paymentTotalAmount += 90;
-        else
-          thisOrder.paymentTotalAmount += (thisOrder.quantity * 60);
+        if(thisOrder.quantity <= 1){
+          shippingFee = 60;
+          thisOrder.paymentTotalAmount += 60;
+        }else{
+          shippingFee = 0;
+        }
       }
 
       //計算包裝費
@@ -356,6 +359,17 @@ var self = module.exports = {
         bonusPoint.remain = 0;
       }
 
+      let {shipment, invoice} = newOrder;
+      // shipment fee
+      // when user is for him self.
+      if (shipment.zipcode == '') {
+        shipment.zipcode = user.zipcode;
+        shipment.city = user.city;
+        shipment.region = user.region;
+      }
+      shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
+      shipment.shippingFee = shippingFee;
+
       let isolationLevel = db.Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
       let transaction = await db.sequelize.transaction({isolationLevel});
 
@@ -368,15 +382,15 @@ var self = module.exports = {
 
         let createdOrderItemIds = createdOrderItems.map((orderItem) => orderItem.id);
 
-        let {shipment, invoice} = newOrder;
-        // shipment fee
-        // when user is for him self.
-        if (shipment.zipcode == '') {
-          shipment.zipcode = user.zipcode;
-          shipment.city = user.city;
-          shipment.region = user.region;
-        }
-        shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
+        // let {shipment, invoice} = newOrder;
+        // // shipment fee
+        // // when user is for him self.
+        // if (shipment.zipcode == '') {
+        //   shipment.zipcode = user.zipcode;
+        //   shipment.city = user.city;
+        //   shipment.region = user.region;
+        // }
+        // shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
 
         let createdOrder = await db.Order.create(thisOrder, {transaction});
         let createdShipment = await db.Shipment.create(shipment, {transaction});
