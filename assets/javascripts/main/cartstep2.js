@@ -38,26 +38,26 @@
   };
   twzipcodeShipment();
   // end twzipcode
-
+  var picklete_cart = Cookies.getJSON('picklete_cart');
+  picklete_cart = picklete_cart ? picklete_cart : window.location.replace("/shop/products");
   // display shipping fee
-  var shippingFeeField = $('#shippingFeeField');
-  var shippingFeePrice = parseInt(Cookies.getJSON('shipping').shippingFee);
-  var shippingFeeFree = (Cookies.getJSON('shipping').shippingFeeFree);
-  if(shippingFeeFree) {
-    shippingFeeField.text('免運');
-    shippingFeePrice = 0;
-  } else {
-    shippingFeeField.text(shippingFeePrice);
+  var totalQuantity = 0;
+  picklete_cart.orderItems.forEach(function(orderItem, index){
+    totalQuantity += parseInt(orderItem.quantity,10);
+  });
+  var shippingFeePrice = 0;
+  if(totalQuantity == 1){
+    shippingFeePrice = 90;
+  }else{
+    shippingFeePrice = totalQuantity * 60;
   }
+  $("#shippingFeeField").text(shippingFeePrice);
 
   // display packing fee
   var packingFeeField = $('#packingFeeField');
   var packingFeePrice = parseInt(Cookies.getJSON('packing').packingFee);
   console.log('=== packingFeePrice ===>',packingFeePrice);
   packingFeeField.text(packingFeePrice);
-
-  var picklete_cart = Cookies.getJSON('picklete_cart');
-  picklete_cart = picklete_cart ? picklete_cart : window.location.replace("/shop/products");
 
   var buyMoreObject = Cookies.getJSON('buyMoreIds');
   var shopCodeObject =Cookies.getJSON('shopCode');
@@ -143,7 +143,7 @@
         alert("請輸入公司抬頭");
         $("input[name='order[invoice][title]']").focus();
         return;
-      } 
+      }
       if ($("input[name='order[invoice][taxId]']").val() == "") {
         alert("請輸入統一編號");
         $("input[name='order[invoice][taxId]']").focus();

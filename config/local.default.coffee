@@ -5,6 +5,7 @@ module.exports = {
   initData: ''
   domain: 'http://localhost:1337'
   cookieVersion:'0.1'
+  shipment: 'agricloud'
   # mail: {
   #   type: 'ses'
   #   active: false

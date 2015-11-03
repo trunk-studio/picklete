@@ -313,7 +313,7 @@ var self = module.exports = {
       let useAllPay = false;
       if(sails.config.useAllPay !== undefined)
           useAllPay = sails.config.useAllPay;
-      if(useAllPay){
+      if(sails.config.shipment != 'agricloud'){
         // 有用歐付寶的運費運算, to fixed fee is parseInt error or NaN
         if(thisOrder.paymentTotalAmount < 390){
           let fee = parseInt(newOrder.shipment.shippingFee, 10);
@@ -330,6 +330,7 @@ var self = module.exports = {
             throw new error ("運費有錯誤！");
         }
       }else{
+        sails.log.info("=== quantity ===",thisOrder.quantity);
         if(thisOrder.quantity == 1)
           thisOrder.paymentTotalAmount += 90;
         else
