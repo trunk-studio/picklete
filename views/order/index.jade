@@ -98,6 +98,24 @@ block body
             // /form-group
           // /col-md-4
           // /col-md-8
+        // /row
+        .row.row-m
+          .col-md-4
+          .col-md-4
+            .form-group
+              label.col-md-4.control-label 預計出貨日
+              .col-md-8
+                input.form-control(type='date', placeholder="2015-10-30", name='deliveryTimeTypeStart', value = query.deliveryTimeTypeStart?query.deliveryTimeTypeStart: null)
+            // /form-group
+          // /col-md-4
+          .col-md-4
+            .form-group
+              label.col-md-4.control-label.text-center #{i18n('until')}
+              .col-md-8
+                input.form-control(type='date', placeholder="2015-10-30", name='deliveryTimeTypeEnd', value = query.deliveryTimeTypeEnd?query.deliveryTimeTypeEnd: null)
+            // /form-group
+          // /col-md-4
+          // /col-md-8
           .col-md-12.text-right
             a.btn.btn-primary(onClick='$("form[name=\'searchOrders\']").submit()') 查詢
           // /col-md-12
@@ -145,13 +163,13 @@ block body
         // /col-sm-1
         .col-sm-1 付款狀態
         // /col-sm-1
-        .col-sm-2 訂單日期
+        .col-sm-2 訂單日期/預計出貨日
         // /col-sm-2
         .col-sm-1.col-sm-1-lg 出貨狀態
         // /col-sm-1
       // /row
     // /p-10-20
-    
+    -console.log(orders.rows[0])
     each order in orders.rows
       .panel.panel-purchase
         .panel-heading
@@ -177,6 +195,7 @@ block body
                 span.glyphicon.glyphicon-remove-circle.text-danger
             // /col-sm-1
             .col-sm-2 #{sails.moment(order.createdAt).format('YYYY/MM/DD hh:mm')}
+              | #{sails.moment(order.Shipment.deliveryTimeType).format('YYYY/MM/DD')}
             // /col-sm-2
             .col-sm-1.col-sm-1-lg
               if order.status == "new"
