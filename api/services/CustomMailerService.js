@@ -57,7 +57,8 @@ module.exports = {
         deadLine:  sails.moment(result.order.createdAt).add(3, 'days').format('YYYY/MM/DD HH:mm:ss'),
         productName: productsName.join('、'),
         serviceMail: sails.config.store.serviceMail,
-        paymentMethod: result.paymentMethod
+        paymentMethod: result.paymentMethod,
+        deliveryDate: sails.moment(result.order.Shipment.deliveryTimeType).format('YYYY/MM/DD')
         // fullName: result.order.User.username,
         // orderSerialNumber: result.order.serialNumber,
         // productName: productsName.join('、'),

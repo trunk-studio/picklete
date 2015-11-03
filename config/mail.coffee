@@ -31,6 +31,9 @@ module.exports.mail = {
       <br />訂購項目：
       <br />%(productName)s
       <br />
+      <br />預計出貨日：
+      <br />%(deliveryDate)s
+      <br />
       <br />為了保障您的資料安全，請登入會員中心查詢90天內所有訂單詳細資訊。
       <br />祝您購物愉快
       <br />此為系統信件，請勿直接回覆此信件
