@@ -63,7 +63,6 @@ OrderController = {
       }else if(query.deliveryTimeTypeStart || query.deliveryTimeTypeEnd) {
         queryShipmentObj.deliveryTimeType = query.deliveryTimeTypeStart? { gte : new Date(query.deliveryTimeTypeStart)}: { lte : new Date(query.deliveryTimeTypeEnd)};
       }
-      sails.log.info("!!!!!!!!!!!",queryShipmentObj);
 
       if(query.createdStart && query.createdEnd) {
          queryObj.createdAt = { between : [new Date(query.createdStart), new Date(query.createdEnd)]};
