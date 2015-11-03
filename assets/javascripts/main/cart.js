@@ -233,6 +233,12 @@
     Cookies.set('paymentMethod', $('#paymentMethod').val());
   });
 
+  $(".container").on("change", "#deliveryTimeType", function (e) {
+    e.preventDefault();
+    Cookies.set('deliveryTimeType', $('#deliveryTimeType').val());
+    console.log('==== deliveryTimeType ==>', $('#deliveryTimeType').val());
+  });
+
   // 運送方式：快遞/郵寄
   $(".container").on("change", "#shippingType", function (e) {
     e.preventDefault();
@@ -312,8 +318,8 @@
     var packing = { packingQuantity: packingQuantity, packingFee: packingFee};
     Cookies.set('packing', packing);
 
-    if($('#paymentMethod').val()==0)
-      alert("請確認付款方式");
+    if( $('#deliveryTimeType').val()==0 || $('#paymentMethod').val()==0)
+      alert("請確認付款方式、到貨日期");
     else{
       $.ajax({
           url : '/user/loginStatus',

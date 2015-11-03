@@ -236,7 +236,8 @@ var self = module.exports = {
         useBunusPoint: 0,
         packingFee: newOrder.packingFee || 0,
         packingQuantity: newOrder.packingQuantity,
-        description: newOrder.description
+        description: newOrder.description,
+        deliveryTimeType: newOrder.deliveryTimeType || 0
       };
       // 計算購買商品價格
       products.forEach((product, index) => {
@@ -369,6 +370,8 @@ var self = module.exports = {
       }
       shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
       shipment.shippingFee = shippingFee;
+      if(thisOrder.deliveryTimeType != 0)
+        shipment.deliveryTimeType = sails.config.deliveryTime[thisOrder.deliveryTimeType];
 
       let isolationLevel = db.Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
       let transaction = await db.sequelize.transaction({isolationLevel});

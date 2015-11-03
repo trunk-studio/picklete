@@ -163,6 +163,7 @@
     postData.order.orderItems = picklete_cart.orderItems;
     postData.order.shippingFee = Cookies.getJSON('shippingFee');
     postData.order.paymentMethod = Cookies.getJSON('paymentMethod');
+    postData.order.deliveryTimeType = Cookies.getJSON('deliveryTimeType');
 
     postData.order.additionalPurchasesItem = picklete_cart.additionalPurchasesItem
 

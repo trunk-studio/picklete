@@ -2,6 +2,7 @@ include ../mixins/_product
 extends ../_layout_head
 
 block body
+  -console.log("!!!",sails.config.deliveryTime)
     .container
       h1.text-black.m-top-10.m-bottom-6 #{i18n('shopping-cart')}
       #nothing.border-block-3.m-bottom-10.text-center.p-top-10.p-bottom-10
@@ -75,6 +76,21 @@ block body
                     //-   option 宅配 / 郵局
                   // /form-group
                 // /col-sm-4
+                -if(sails.config.deliveryTime)
+                  .col-sm-4
+                    .form-group
+                      label
+                        | 到貨日期
+                        span.text-danger *
+                      select#deliveryTimeType.form-control
+                        option(value='0') #{i18n('select')}
+                        -var index = 0;
+                        each time in sails.config.deliveryTime
+                          - index ++ 
+                          -if( sails.moment(time) > sails.moment())
+                            option(value= index) #{time}
+                    // /form-group
+                  // /col-sm-4
                 .col-sm-4
                   .form-group
                     label
@@ -207,3 +223,4 @@ block body
     // /modal
   block js
     script(src="/javascripts/main/cart.js")
+    
