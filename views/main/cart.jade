@@ -75,6 +75,21 @@ block body
                     //-   option 宅配 / 郵局
                   // /form-group
                 // /col-sm-4
+                -if(sails.config.deliveryTime)
+                  .col-sm-4
+                    .form-group
+                      label
+                        | 出貨日期
+                        span.text-danger *
+                      select#deliveryTimeType.form-control
+                        option(value='0') #{i18n('select')}
+                        -var index = 0;
+                        each time in sails.config.deliveryTime
+                          - index ++ 
+                          -if( sails.moment(time) > sails.moment())
+                            option(value= index) #{time}
+                    // /form-group
+                  // /col-sm-4
                 .col-sm-4
                   .form-group
                     label
@@ -102,7 +117,7 @@ block body
                 // /col-sm-4
               // /row
               .row
-              span *購物滿390即可享有免運費優惠！
+              span #{sails.config.freeShippingInformation}
                 span#feeFreeNoticer
               // /row
             // /p-20
@@ -207,3 +222,4 @@ block body
     // /modal
   block js
     script(src="/javascripts/main/cart.js")
+    

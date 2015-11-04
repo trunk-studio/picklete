@@ -40,15 +40,20 @@
 
     var tmpPrice = subtotal + buymore - discountAmount;
 
+
+    totalQuantity = 0
+    picklete_cart.orderItems.forEach(function(orderItem, index){
+      totalQuantity += parseInt(orderItem.quantity,10);
+    });
     // 免運
-    if(parseInt(tmpPrice) >= shippingFeeFreeThreshold){
+    if(totalQuantity > 1){
       $("#shippingFeeField").text('免運');
       shippingFeeFree = true;
       shippingFee = 0;
     }else{
-      $("#shippingFeeField").text($("#shippingFeeSelect").val());
       shippingFeeFree = false;
-      shippingFee = parseInt($("#shippingFeeSelect").val());
+      shippingFee = 60;
+      $("#shippingFeeField").text(shippingFee);
     }
 
     packingFee = packingFeeBasic * packingQuantity;
@@ -228,6 +233,12 @@
     Cookies.set('paymentMethod', $('#paymentMethod').val());
   });
 
+  $(".container").on("change", "#deliveryTimeType", function (e) {
+    e.preventDefault();
+    Cookies.set('deliveryTimeType', $('#deliveryTimeType').val());
+    console.log('==== deliveryTimeType ==>', $('#deliveryTimeType').val());
+  });
+
   // 運送方式：快遞/郵寄
   $(".container").on("change", "#shippingType", function (e) {
     e.preventDefault();
@@ -247,7 +258,7 @@
     e.preventDefault();
     Cookies.set('code', $("#code").val());
     console.log('==== code ==>', $("#code").val());
-  });  
+  });
 
   var selectedDeleteOrderitem = {};
   var selectedDeleteOrderitemIndex = -1;
@@ -307,8 +318,8 @@
     var packing = { packingQuantity: packingQuantity, packingFee: packingFee};
     Cookies.set('packing', packing);
 
-    if($('#shippingFeeSelect').val() == 0 || $('#paymentMethod').val()==0)
-      alert("請確認運送、付款方式");
+    if( $('#deliveryTimeType').val()==0 || $('#paymentMethod').val()==0)
+      alert("請確認付款方式、到貨日期");
     else{
       $.ajax({
           url : '/user/loginStatus',
@@ -468,7 +479,7 @@
             var shippingFeeSelect = $("#shippingFeeSelect");
             var shippingRegion = Cookies.getJSON('shippingRegion');
             for(i=0;i<data.shippings.length;i++){
-              shipping = data.shippings[i].region + ' ' + data.shippings[i].fee + ' 元';
+              shipping = data.shippings[i].region ;
               if(data.shippings[i].fee == shippingRegion){
                 shippingFeeSelect.append($("<option data-region='"+data.shippings[i].region+"'></option>").attr("value", data.shippings[i].fee).attr('selected','selected').text(shipping));
                 $("#shippingFeeSelect").change();

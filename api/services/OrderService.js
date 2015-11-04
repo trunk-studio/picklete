@@ -236,7 +236,8 @@ var self = module.exports = {
         useBunusPoint: 0,
         packingFee: newOrder.packingFee || 0,
         packingQuantity: newOrder.packingQuantity,
-        description: newOrder.description
+        description: newOrder.description,
+        deliveryTimeType: newOrder.deliveryTimeType || 0
       };
       // 計算購買商品價格
       products.forEach((product, index) => {
@@ -310,10 +311,11 @@ var self = module.exports = {
       }
 
       // 計算運費
+      let shippingFee = 0;
       let useAllPay = false;
       if(sails.config.useAllPay !== undefined)
           useAllPay = sails.config.useAllPay;
-      if(useAllPay){
+      if(sails.config.shipment != 'agricloud'){
         // 有用歐付寶的運費運算, to fixed fee is parseInt error or NaN
         if(thisOrder.paymentTotalAmount < 390){
           let fee = parseInt(newOrder.shipment.shippingFee, 10);
@@ -330,10 +332,13 @@ var self = module.exports = {
             throw new error ("運費有錯誤！");
         }
       }else{
-        if(thisOrder.quantity == 1)
-          thisOrder.paymentTotalAmount += 90;
-        else
-          thisOrder.paymentTotalAmount += (thisOrder.quantity * 60);
+        sails.log.info("=== quantity ===",thisOrder.quantity);
+        if(thisOrder.quantity <= 1){
+          shippingFee = 60;
+          thisOrder.paymentTotalAmount += 60;
+        }else{
+          shippingFee = 0;
+        }
       }
 
       //計算包裝費
@@ -355,6 +360,19 @@ var self = module.exports = {
         bonusPoint.remain = 0;
       }
 
+      let {shipment, invoice} = newOrder;
+      // shipment fee
+      // when user is for him self.
+      if (shipment.zipcode == '') {
+        shipment.zipcode = user.zipcode;
+        shipment.city = user.city;
+        shipment.region = user.region;
+      }
+      shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
+      shipment.shippingFee = shippingFee;
+      if(thisOrder.deliveryTimeType != 0)
+        shipment.deliveryTimeType = sails.config.deliveryTime[thisOrder.deliveryTimeType];
+
       let isolationLevel = db.Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
       let transaction = await db.sequelize.transaction({isolationLevel});
 
@@ -367,15 +385,15 @@ var self = module.exports = {
 
         let createdOrderItemIds = createdOrderItems.map((orderItem) => orderItem.id);
 
-        let {shipment, invoice} = newOrder;
-        // shipment fee
-        // when user is for him self.
-        if (shipment.zipcode == '') {
-          shipment.zipcode = user.zipcode;
-          shipment.city = user.city;
-          shipment.region = user.region;
-        }
-        shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
+        // let {shipment, invoice} = newOrder;
+        // // shipment fee
+        // // when user is for him self.
+        // if (shipment.zipcode == '') {
+        //   shipment.zipcode = user.zipcode;
+        //   shipment.city = user.city;
+        //   shipment.region = user.region;
+        // }
+        // shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
 
         let createdOrder = await db.Order.create(thisOrder, {transaction});
         let createdShipment = await db.Shipment.create(shipment, {transaction});

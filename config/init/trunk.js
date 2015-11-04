@@ -190,12 +190,12 @@ module.exports.createTestData = async () => {
   let testDatas = [
   {
     type: 'postoffice',
-    region: '台灣本島',
-    fee: '100'
+    region: '自動計算',
+    fee: '0'
   },{
     type: 'delivery',
-    region: '台灣本島',
-    fee: '150'
+    region: '自動計算',
+    fee: '0'
   }];
   await* testDatas.map(async (testData) => {
     return await db.Shipping.create(testData);

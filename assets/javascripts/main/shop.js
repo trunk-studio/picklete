@@ -9,7 +9,7 @@
 
   $('#yourId').on('hidden.bs.dropdown', function (){
     $(this).click(function (event) {
-       $('.dropdown-toggle').dropdown('toggle'); 
+       $('.dropdown-toggle').dropdown('toggle');
     });
   });
 
@@ -155,13 +155,13 @@
 
     // check product is added, it will added to same data
     var isTheSame = false;
-    for(var orderItem of picklete_cart.orderItems) {
+    picklete_cart.orderItems.forEach(function(orderItem) {
       if(orderItem.ProductId == addProduct.ProductId) {
         isTheSame = true;
         orderItem.quantity = (parseInt(orderItem.quantity,10) + parseInt(addProduct.quantity,10)).toString();
-        break;
+        return;
       }
-    }
+    });
 
     if( !isTheSame ) {
       picklete_cart.orderItems.push(addProduct);
