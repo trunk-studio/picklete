@@ -10,14 +10,21 @@ module.exports = (sequelize, DataTypes) ->
       'orderConfirm',
       'paymentConfirm',
       'deliveryConfirm',
-      'orderSync'
+      'orderSync',
+      'checkForgotPassword',
+      'newPassword',
+      'verification',
+      'shopCode',
+      'contactUs'
     )
     from: DataTypes.STRING
     to: DataTypes.STRING
+    toName: DataTypes.STRING
     subject: DataTypes.STRING
     text: DataTypes.TEXT
     html: DataTypes.TEXT
     success: DataTypes.BOOLEAN
+    response: DataTypes.STRING
     error: DataTypes.STRING
   }, classMethods: associate: (models) ->
     return

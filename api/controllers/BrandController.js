@@ -1,4 +1,4 @@
-
+import _ from 'lodash';
 
 let BrandController = {
 
@@ -6,33 +6,25 @@ let BrandController = {
 
     if (req.method === "GET") {
       return res.view("admin/brandCreate", {
-        pageName: "brands"
+      pageName: "/admin/brands"
       });
     }
 
-    var brandData = req.body;
-    // console.log(brandData);
+    var params = req.body;
 
-    let uploadInput = ["avatar", "photos[]", "banner"];
-    let files = await ImageService.upload(req, uploadInput);
-
-    if (files[0].length) {
-      brandData.avatar = files[0][0].fd;
+    console.log('craete server ', params);
+    if (! params) {
+      return res.redirect("/admin/brands");
     }
 
-    let photos = files[1];
-    if (photos.length) {
-      for (let i in photos) {
-        photos[i] = photos[i].fd;
-      }
-      brandData.photos = photos;
-    }
-
-    if (files[2].length) {
-      brandData.banner = files[2][0].fd;
-    }
-
-    console.log(brandData);
+    let brandData = {
+      avatar: params['avatar'],
+      name: params['name'],
+      type: params['type'] || "OTHER",
+      desc: params['desc'],
+      banner: params['banner'],
+      photos: params['photos']
+    };
 
     // create brand
     try {
@@ -47,64 +39,122 @@ let BrandController = {
 
   list: async (req, res) => {
 
-    let brandsGood = await db.Brand.findAll({
-      where: {
-        type: 'PRIME_GOOD'
-      }
-    });
-
-    let brandsAgent = await db.Brand.findAll({
-      where: {
-        type: 'AGENT'
-      }
-    });
-
-    let brandLock = await db.Brand.findOne({
-      where: {
-        type: 'OTHER'
-      }
-    });
-
-    // console.log(brands);
+    let brands = await BrandService.list();
 
     // return res.ok(brands);
-    res.view("admin/brandList", {
-      pageName: "brands",
-      brands: brandsGood,
-      agents: brandsAgent,
-      brandLock: brandLock
+    res.view('admin/brandList', {
+      pageName: '/admin/brands',
+      brands: brands.brandsGood,
+      agents: brands.brandsAgent,
+      brandLocks: brands.brandLock
+    });
+  },
+
+  listView: async (req, res) => {
+
+    let brands = await BrandService.list();
+
+    // return res.ok(brands);
+    res.view('main/brandList', {
+      brands: brands.brandsGood,
+      agents: brands.brandsAgent,
+      brandLocks: brands.brandLock
     });
   },
 
   update: async (req, res) => {
 
     try {
-      let brandId = req.params.brand;
-      var updateData = req.body;
+      let brandId = req.query.id;
+      let brand = await db.Brand.findById(brandId);
+      if( ! brand) throw new Error ('找不到這個 brand');
+      if (req.method === "GET") {
+        return res.view("admin/brandCreate", {
+          brand: brand.dataValues || null
+        });
+      }
 
-      let brand = await db.Brand.findById(brandId)
+      var params = req.body;
 
-      if(!brand) throw new Error ('找不到這個 brand');
+      console.log('craete server ', params);
 
-      brand.name = updateData.name;
-      brand.avatar = updateData.avatar;
-      brand.type = updateData.type;
-      brand.desc = updateData.desc;
-      brand.banner = updateData.banner;
-      brand.photos = updateData.photos;
+      if (! params) {
+        return res.redirect("/admin/brands");
+      }
+
+      brand.avatar = params['avatar'];
+      brand.name = params['name'];
+      brand.type = params['type'] || "OTHER";
+      brand.desc = params['desc'];
+      brand.banner = params['banner'];
+      brand.photos = params['photos'];
 
       let updatedBrand = await brand.save();
-
-      return res.ok(updatedBrand);
-
+      return res.redirect("/admin/brands");
     } catch (e) {
       let msg = e.message;
       return res.serverError({msg});
 
     }
 
-  }
+  },
+
+  show: async (req, res) => {
+    try {
+      let brandId = req.params["id"] || null;
+
+      if ( ! brandId)
+        return res.redirect("/");
+
+      let brand = await db.Brand.findOne({ where: {id: brandId}});
+
+      return res.view("main/brands", {
+        brand
+      });
+    } catch (e) {
+      let msg = e.message;
+      return res.serverError({msg});
+    }
+
+  },
+
+  delete: async (req, res) => {
+    try{
+
+      let deleteBrand = await db.Brand.destroy({
+        where: {
+          id : req.body.id
+        }
+      });
+
+      return res.redirect("/admin/brands");
+    } catch(e){
+      let msg = e.message;
+      return res.serverError({msg});
+    }
+  },
+
+  resetWeight: async (req, res) => {
+    try {
+      let brandIdArray = req.body.data;
+      let weight = 1;
+      for (let count = 0; count < brandIdArray.length; count++) {
+        await* brandIdArray[count].map(async(brandId) => {
+
+          let brand = await db.Brand.findById(brandId.id);
+
+          brand.weight = weight;
+          weight += 1;
+          return await brand.save();
+        });
+      }
+
+      return res.ok();
+    } catch (e) {
+      let msg = e.message;
+      return res.serverError({msg});
+    }
+  },
 
 };
-
 module.exports = BrandController;

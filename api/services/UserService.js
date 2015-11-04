@@ -13,10 +13,10 @@ module.exports = {
   },
 
   getLoginUser: function(req) {
-    if (req.session.passport.user) {
+    if (req.session.passport != undefined && req.session.passport.user) {
       return req.session.passport.user;
     } else {
-      return false;
+      return null;
     }
   },
 
@@ -58,6 +58,30 @@ module.exports = {
       }
     });
     return users;
+  },
+
+  calcTotalBonusRemain: async (user) => {
+    /*
+    let result = 0;
+
+    let bonus = await db.BonusPoint.findAll({
+      where: {
+        email: user.email
+      }
+    });
+
+    if (bonus) {
+      for (var i = 0; i < bonus.length; i++) {
+        result += bonus[i].remain;
+      }
+    }
+    */
+
+    return await db.BonusPoint.sum('remain', {
+      where: {
+        email: user.email
+      }
+    });
   }
 
   /*

@@ -9,11 +9,331 @@
 let moment = require("moment");
 
 let UserController = {
+
+
+  verify: async (req, res) => {
+    var email = req.param("email");
+
+    if ( ! email)
+      return res.json({ result: 'fail' });
+
+    try {
+      if(UserService.getLoginState(req)){
+        let loginUser = UserService.getLoginUser(req);
+        var result = await db.User.findOne({
+          where: {
+            email: email
+          }
+        });
+        if(result){
+          if(result.id == loginUser.id){
+            result = null;
+          }
+        }
+      }else{
+        var result = await db.User.findOne({
+          where: {
+            email: email
+          }
+        });
+      }
+
+      var response = (result) ? { result: "existed" } : { result: "ok" };
+      return res.json(response);
+    } catch (e) {
+      console.log(e);
+      return res.json({ result: 'fail'});
+      return res.view("main/memberFavorite", {products: []});
+    }
+  },
+
+  favorite: async (req, res) => {
+
+    var FAV_KEY = "picklete_fav";
+    var favoriteKeys = req.cookies[FAV_KEY];
+    try {
+      favoriteKeys = JSON.parse(favoriteKeys);
+    } catch (e) {
+      favoriteKeys = null;
+      return res.view("main/memberFavorite", {products: []});
+    }
+
+    let products = await ProductService.findFavorite(favoriteKeys);
+
+    res.view("main/memberFavorite", {
+      products
+    });
+  },
+
+  updatefavorite: async (req, res) => {
+
+    var FAV_KEY = "picklete_fav";
+    var favoriteKeys = req.cookies[FAV_KEY];
+    sails.log.info("=== cookies ===",req.cookies);
+    try {
+      favoriteKeys = JSON.parse(favoriteKeys);
+      sails.log.info("=== favoriteKeys ===",favoriteKeys);
+      let products = Object.keys(favoriteKeys);
+      sails.log.info("=== products ===",products);
+      let user = UserService.getLoginUser(req);
+      if(user){
+        user = await db.User.findById(user.id);
+        let UserFavorites = await user.getProducts();
+        let favorite = await* products.map( async (productId) => {
+          // sails.log.info("==== find ====",find);
+          let product;
+          let isNewFavorite = true;
+          UserFavorites.forEach((favorite) => {
+            if(favorite.id == productId){
+              isNewFavorite = false
+            }
+          });
+          product = await db.Product.findById(productId);
+          if(isNewFavorite){
+            let productGm = await db.ProductGm.findById(product.ProductGmId);
+
+            let count = (await db.LikesCount.findOrCreate({
+              where:{
+                ProductGmId: productGm.id
+              },
+              defaults:{
+                ProductGmId: productGm.id
+              }
+            }))[0];
+            count.likesCount ++;
+            count = await count.save();
+
+          }
+          return product;
+        });
+        await user.setProducts(favorite);
+      }
+      let message = '更新收藏';
+      return res.ok(message);
+    } catch (e) {
+      favoriteKeys = null;
+      sails.log.error(e);
+      let {message} = e;
+      let success = false;
+      return res.json(500,{message, success});
+    }
+  },
+
+  // /* 3:50:05 AM Localhost */ SELECT * FROM `Orders` ORDER BY `createdAt` DESC LIMIT 0,1000;
+
+  purchase:async (req, res) => {
+    let loginUser = UserService.getLoginUser(req);
+    let orders = await db.Order.findAll({
+      where: {UserId: loginUser.id},
+      order: 'createdAt DESC',
+      include: [{
+        model: db.OrderItem
+      },{
+        model: db.Shipment
+      },{
+        model: db.Invoice
+      }]
+    });
+
+    // sails.log.info("=== purchase orders ===",JSON.stringify(orders,null,2));
+    res.view("main/memberPurchase",{
+      orders
+    });
+  },
+  loginStatus: async(req, res) => {
+    try {
+        let loginStatus = UserService.getLoginState(req);
+        return res.ok({loginStatus});
+    } catch (e) {
+      console.error(e.stack);
+      let {message} = e;
+      let success = false;
+      return res.serverError({message, success});
+    }
+  },
+
+  cart: async (req, res) => {
+    try {
+      console.log('=== req.cookies ===', req.cookies.picklete_cart);
+
+      let picklete_cart = req.cookies.picklete_cart;
+      let paymentTotalAmount = 0;
+
+      if(picklete_cart != undefined){
+        picklete_cart = JSON.parse(picklete_cart);
+        picklete_cart.orderItems.forEach( (orderItem) => {
+          paymentTotalAmount += parseInt(orderItem.quantity, 10) * parseInt(orderItem.price, 10);
+        });
+      }
+      let slesctedAdditionalPurchases=[];
+      if(picklete_cart && picklete_cart.hasOwnProperty('additionalPurchasesItem')){
+        slesctedAdditionalPurchases = await AdditionalPurchaseService.cartAddAdditionalPurchases(picklete_cart.additionalPurchasesItem);
+        picklete_cart.buymore = slesctedAdditionalPurchases.buyMoreTotalPrice;
+        res.cookie('picklete_cart', JSON.stringify(picklete_cart));
+      }
+
+      let company = await db.Company.findOne();
+      let brands = await db.Brand.findAll();
+
+      let date = new Date();
+      let query = {date, paymentTotalAmount};
+      let additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
+      // add an item for Shippings
+      let shippings = await ShippingService.findAll();
+      // console.log('=== shippings ==>',shippings);
+      let paymentMethod = sails.config.allpay.paymentMethod;
+      return res.view('main/cart', {
+        company,
+        brands,
+        additionalPurchaseProducts,
+        slesctedAdditionalPurchases,
+        shippings,
+        paymentMethod
+      });
+    } catch (e) {
+      sails.log.error(e.stack);
+      let {message} = e;
+      let success = false;
+      return res.serverError({message, success});
+    }
+  },
+
+  addAdditionalPurchases: async (req, res) => {
+    try{
+      console.log('=== addAdditionalPurchases ===',req.query);
+      let data = req.query;
+      let picklete_cart = req.cookies.picklete_cart;
+      if(picklete_cart != undefined){
+        
+        try {
+          picklete_cart = JSON.parse(picklete_cart);  
+        } catch (e) {
+          console.error(e.stack);
+          let {message} = e;
+          res.serverError({message});
+        }
+        
+        // if(picklete_cart.hasOwnProperty('additionalPurchasesItem')) {
+        //   picklete_cart.additionalPurchasesItem = [];
+        // }
+
+        picklete_cart.additionalPurchasesItem = picklete_cart.additionalPurchasesItem ? picklete_cart.additionalPurchasesItem : [];
+
+        picklete_cart.additionalPurchasesItem.push({
+          additionalPurchasesId: data.additionalPurchasesId,
+          productId: data.productId
+        });
+        
+        res.cookie('picklete_cart', JSON.stringify(picklete_cart));
+      }
+      res.redirect("/user/cart");
+    } catch (e) {
+      console.error(e.stack);
+      let {message} = e;
+      res.serverError({message});
+    }
+  },
+
+  removeAdditionalPurchases: async (req, res) => {
+    try{
+      console.log('=== addAdditionalPurchases ===',req.query);
+      let data = req.query;
+      let picklete_cart = req.cookies.picklete_cart;
+      if(picklete_cart != undefined){
+        picklete_cart = JSON.parse(picklete_cart);
+        picklete_cart.additionalPurchasesItem.splice(data.index, 1);
+        res.cookie('picklete_cart', JSON.stringify(picklete_cart));
+      }
+      res.redirect("/user/cart");
+    } catch (e) {
+      console.error(e.stack);
+      let {message} = e;
+      res.serverError({message});
+    }
+  },
+
+  edit: async (req, res) => {
+    let loginUser = UserService.getLoginUser(req);
+
+    let user = (await db.User.find({
+      where: {id: loginUser.id},
+      include: [db.Like]
+    })).toJSON();
+
+    let passport = await db.Passport.find({where: {UserId: user.id}});
+    user.password = passport.password;
+    user.passwordAgain = passport.password;
+
+
+    user.userLikes = user.Likes.map((like) => like.id+"");
+
+    let likes = await db.Like.findAll();
+    res.view({
+      user,
+      likes
+    });
+  },
+  update: async (req, res) => {
+
+    try {
+      let loginUser = UserService.getLoginUser(req);
+      let updateUser = req.body;
+      let passport = await db.Passport.find({where: {UserId: loginUser.id}});
+
+      let user = await db.User.findOne({
+        where:{
+          id: loginUser.id
+        },
+        include:{
+          model: db.Role
+        }
+      });
+
+      if(updateUser.password != passport.password){
+        passport.password = updateUser.password;
+        await passport.save()
+      }
+
+      let updateUserKeys = Object.keys(updateUser);
+
+      updateUserKeys.forEach((key)=>{
+        if(typeof(user[key]) != undefined) user[key] = updateUser[key];
+      });
+
+      await user.save();
+
+      if(updateUser.userLikes != undefined)
+        await user.setLikes(updateUser.userLikes);
+
+      let messageConfig = await CustomMailerService.userUpdateMail(user);
+      let message = await db.Message.create(messageConfig);
+      await CustomMailerService.sendMail(message);
+
+      req.login(user, function(err) {
+          if (err) return res.serverError(err);
+
+          return res.redirect('/');
+      })
+
+    } catch (e) {
+      console.error(e.stack);
+      let {message} = e;
+      res.serverError({message});
+
+    }
+
+
+
+
+
+
+  },
+
   controlLogin: function(req, res) {
     if(UserService.getLoginState(req))
       res.redirect('/admin/goods');
     else
-      res.view({});
+      res.view("admin/login");
   },
   indexSlider: function(req, res) {
     res.view({
@@ -25,8 +345,39 @@ let UserController = {
       pageName: "index-slider-detail"
     });
   },
-  password: function(req, res) {
+  password: async function(req, res) {
+
+    let message = '無';
+
+    try {
+
+      if (req.method=='POST') {
+
+        let user = await UserService.getLoginUser(req);
+
+        if (user) {
+          let passport = await db.Passport.findOne({
+            where: {
+              protocol: 'local',
+              UserId: user
+            }
+          });
+
+          if (passport) {
+            passport.password = req.body.newPassword;
+            passport.save();
+
+            message = '密碼已經更新';
+          }
+        }
+      }
+    }
+    catch (error){
+      return res.serverError(error);
+    }
+
     res.view({
+      message
     });
   },
   indexExclusive: function(req, res) {
@@ -49,101 +400,111 @@ let UserController = {
       pageName: "brands-detail"
     });
   },
-  controlShopType: function (req, res) {
-    res.view({
-      pageName: "shop-type"
-    });
-  },
-  controlShopItemAdd: function(req, res) {
-    res.view({
-      pageName: "shop-item-add"
-    });
-  },
-  controlShopDiscount: function(req, res) {
-    res.view({
-      pageName: "shop-discount"
-    });
-  },
-  controlShopDiscountDetail: function(req, res) {
-    res.view({
-      pageName: "shop-discount-detail"
-    });
-  },
-  controlShopDiscountDetail2: function(req, res) {
-    res.view({
-      pageName: "shop-discount-detail2"
-    });
-  },
-  controlShopDiscountAddItem: function(req, res) {
-    res.view({
-      pageName: "shop-discount-add-item"
-    });
-  },
-  controlShopBuyMore: function(req, res) {
-    res.view({
-      pageName: "shop-buy-more"
-    });
-  },
-  controlShopBuyMoreDetail: function(req, res) {
-    res.view({
-      pageName: "shop-buy-more-detail"
-    });
-  },
-  controlShopBuyMoreAddItem: function(req, res) {
-    res.view({
-      pageName: "shop-buy-more-add-item"
-    });
-  },
-  controlShopCode: function(req, res) {
-    res.view({
-      pageName: "shop-code"
-    });
-  },
-  controlShopCodeDetail: function(req, res) {
-    res.view({
-      pageName: "shop-code-detail"
-    });
-  },
-  controlShopReportForm: function(req, res) {
-    res.view({
-      pageName: "shop-report-form"
-    });
-  },
-
   controlAbout: function(req, res) {
     res.view({
       pageName: "about"
     });
   },
-  controlQa: function(req, res) {
-    res.view({
-      pageName: "qa"
-    });
+  // controlQa: function(req, res) {
+  //   res.view({
+  //     pageName: "qa"
+  //   });
+  // },
+  // controlQaDetail: function(req, res) {
+  //   res.view({
+  //     pageName: "qa-detail"
+  //   });
+  // },
+  // controlQaType: function(req, res) {
+  //   res.view({
+  //     pageName: "qa-type"
+  //   });
+  // },
+  // controlQaAdd: function(req, res) {
+  //   res.view({
+  //     pageName: "qa-add"
+  //   });
+  // },
+  controlMembers: async function(req, res) {
+
+    try {
+      console.log('query',req.query);
+
+      let query = req.query;
+      let queryObj = {};
+
+      if (query.fullName) {
+        queryObj.fullName = { 'like': '%'+query.fullName+'%'};
+      }
+
+      if (query.keyword) {
+        queryObj.$or = [
+          { comment:  { $like: '%'+query.keyword+'%' }},
+          { email:    { $like: '%'+query.keyword+'%' }},
+          { mobile:   { $like: '%'+query.keyword+'%' }},
+          { fullName: { $like: '%'+query.keyword+'%' }}
+        ];
+      }
+
+      if (query.mobile) {
+        queryObj.mobile = { 'like': '%'+query.mobile+'%'};
+      }
+
+      if (query.createdStart && query.createdEnd) {
+         queryObj.createdAt = {
+           between : [
+             new Date(query.createdStart),
+             new Date(query.createdEnd)
+           ]
+         };
+      }
+      else if (query.createdStart || query.createdEnd) {
+        queryObj.createdAt = query.createdStart? {
+          gte : new Date(query.createdStart)}: {
+          lte : new Date(query.createdEnd)};
+      }
+
+      let page = await pagination.page(req);
+      let offset = await pagination.offset(req);
+      let limit = await pagination.limit(req);
+
+      let members = await db.User.findAndCountAll({
+        where: queryObj,
+        offset: offset,
+        limit: limit
+      });
+
+      //查詢購物金
+      for (var i = 0; i < members.rows.length; i++) {
+        let member = members.rows[i];
+
+        member.totalBonusRemain = await UserService.calcTotalBonusRemain(member);
+      }
+
+      res.view("user/controlMembers", {
+        pageName: "members",
+        members: members,
+        page: page,
+        limit: limit,
+        totalPages: Math.ceil(members.count / limit),
+        totalRows: members.count,
+        query
+      });
+    }
+    catch (error) {
+      return res.serverError(error);
+    }
   },
-  controlQaDetail: function(req, res) {
-    res.view({
-      pageName: "qa-detail"
-    });
-  },
-  controlQaType: function(req, res) {
-    res.view({
-      pageName: "qa-type"
-    });
-  },
-  controlQaAdd: function(req, res) {
-    res.view({
-      pageName: "qa-add"
-    });
-  },
-  controlMembers: function(req, res) {
-    res.view({
-      pageName: "members"
-    });
-  },
-  controlMemberDetail: function(req, res) {
-    res.view({
-      pageName: "member-detail"
-    });
+  controlMemberDetail: async function(req, res) {
+    try {
+      res.view("user/controlMemberDetail", {
+        pageName: "member-detail",
+        member: await db.User.findById(req.param('id'))
+      });
+    }
+    catch (error) {
+      return res.serverError(error);
+    }
   },
 
   index: async (req, res) => {
@@ -253,32 +614,6 @@ let UserController = {
       }
       return res.redirect('user/index/');
     }catch(error){
-      return res.serverError(error);
-    }
-  },
-
-  update: async (req, res) => {
-    try {
-      let userId = req.param("id");
-      let findUser = await UserService.findOne(userId);
-      if (!findUser) {
-        return res.serverError({
-          msg: '找不到User！ 請確認User ID！'
-        });
-      }
-      findUser.username = req.body.user.username
-      findUser.email = req.body.user.email
-      findUser.mobile = req.body.user.mobile
-      findUser.address = req.body.user.address
-      findUser.RoleId = req.body.user.RoleId
-      findUser.comment = req.body.user.comment
-      let updateInfo = await findUser.save();
-      if(!updateInfo) {
-        return res.serverError({msg: '更新User失敗'});
-      } else {
-        return res.ok(findUser.toJSON());
-      }
-    } catch (error) {
       return res.serverError(error);
     }
   },

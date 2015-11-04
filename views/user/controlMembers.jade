@@ -12,20 +12,22 @@ block body
   // /row
   #collapse-member.collapse.in
     .well.control-well.p-30.m-bottom-8
-      form.form-horizontal
+      form.form-horizontal.with-pagination(name="searchUsers", action="members", method="get")
+        input(type='hidden', name='page', value=query.page?query.page:0)
+        input(type='hidden', name='limit', value=limit)
         .row.row-m
           .col-md-4
             .form-group
               label.col-md-4.control-label 會員姓名
               .col-md-8
-                input.form-control(type='text')
+                input.form-control(type='text', name='fullName', value = query.fullName?query.fullName: '')
             // /form-group
           // /col-md-4
           .col-md-4
             .form-group
               label.col-md-4.control-label 關鍵字
               .col-md-8
-                input.form-control(type='text')
+                input.form-control(type='text', name='keyword', value = query.keyword?query.keyword: '')
             // /form-group
           // /col-md-4
         // /row
@@ -34,22 +36,22 @@ block body
             .form-group
               label.col-md-4.control-label 聯絡電話
               .col-md-8
-                input.form-control(type='text')
+                input.form-control(type='text', name='mobile', value = query.mobile?query.mobile: '')
             // /form-group
           // /col-md-4
           .col-md-8
             .form-group
               label.col-md-2.control-label 建檔日期
               .col-md-4
-                input.form-control(type='date')
+                input.form-control(type='date', name='createdStart', value = query.createdStart?query.createdStart: null)
               .col-md-2.text-center
                 p.form-control-static 至
               .col-md-4
-                input.form-control(type='date')
+                input.form-control(type='date', name='createdEnd', value = query.createdEnd?query.createdEnd: null)
             // /form-group
           // /col-md-8
           .col-md-12.text-right
-            a.btn.btn-primary(href='#') 查詢
+            a.btn.btn-primary(href='#' onClick='$("form[name=\'searchUsers\']").submit()' ) 查詢
           // /col-md-12
         // /row
       // /form-horizontal
@@ -60,13 +62,13 @@ block body
       form.form-inline
         .form-group
           label 顯示
-          select.form-control
-            option 10
-            option 20
-            option 30
-            option 40
-            option 50
-          label 筆資料（共 90 筆）
+          select#pagination-limit.form-control
+            option(selected=(limit==10)) 10
+            option(selected=(limit==20)) 20
+            option(selected=(limit==30)) 30
+            option(selected=(limit==40)) 40
+            option(selected=(limit==50)) 50
+          label 筆資料（共 #{totalRows} 筆）
         // /form-group
     // /col-md-6
     .col-md-6.desktop-text-right
@@ -77,6 +79,7 @@ block body
   table.table.table-striped
     thead
       tr
+        th 帳號
         th 姓名
         th
           | 生日
@@ -95,36 +98,18 @@ block body
           span.caret
         th
     tbody
-      tr
-        td {user_name}
-        td 1995.08.16
-        td 0912-345-678
-        td xxxx@gmail.com
-        td 100
-        td 換貨+1
-        td.text-right
-          a.btn.btn-link(href='member-detail')
-            span.glyphicon.glyphicon-plus-circle
-      tr
-        td {user_name}
-        td 1995.08.16
-        td 0912-345-678
-        td xxxx@gmail.com
-        td  -
-        td 換貨+1
-        td.text-right
-          a.btn.btn-link(href='member-detail')
-            span.glyphicon.glyphicon-plus-circle
-      tr
-        td {user_name}
-        td 1995.08.16
-        td 0912-345-678
-        td xxxx@gmail.com
-        td 100
-        td  -
-        td.text-right
-          a.btn.btn-link(href='member-detail')
-            span.glyphicon.glyphicon-plus-circle
+      each member in members.rows
+        tr
+          td #{member.username}
+          td #{member.fullName}
+          td #{sails.moment(member.birthDate).format('YYYY/MM/DD')}
+          td #{member.mobile}
+          td #{member.email}
+          td #{member.totalBonusRemain}
+          td #{member.comment}
+          td.text-right
+            a.btn.btn-link(href='member-detail/'+member.id)
+              span.glyphicon.glyphicon-plus-circle
   hr.dashed-line
   .text-center
     //
@@ -132,8 +117,11 @@ block body
       ==================================================
     ul.list-inline.m-bottom-0.m-top-1
       li.border-right-1.p-right-2
-        a(href='#') 上一頁
-      li.border-right-1.p-right-2 第 15 之 20
+        a(href='#' id='pagination-prev') 上一頁
+      li.border-right-1.p-right-2 #{page + 1} / #{totalPages}
       li
-        a(href='#') 下一頁
+        a(href='#' id='pagination-next') 下一頁
   // /text-center
+  
+  block js
+    script(src='/javascripts/common/pagination.js')

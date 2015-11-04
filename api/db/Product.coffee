@@ -1,18 +1,22 @@
 
 module.exports = (sequelize, DataTypes) ->
   Product = sequelize.define 'Product', {
+    # 商品款式名稱
     name: DataTypes.STRING
-    # 商品款式
-    description: DataTypes.STRING
+    # 庫存量
     stockQuantity: DataTypes.INTEGER
+    # 售價
     price: DataTypes.INTEGER
-    isPublish: DataTypes.BOOLEAN
+    # 是否上架
+    isPublish: {
+      type: DataTypes.BOOLEAN,
+      set: (value) ->
+        return this.setDataValue('isPublish', Boolean(value))
+    }
     # 商品尺寸
     size: DataTypes.STRING
     # 備註
     comment: DataTypes.STRING
-    # # 產品規格
-    # spec: DataTypes.STRING
     # 服務項目，可以多選，快遞，超商取貨， ...
     service:  {
       type: DataTypes.STRING,
@@ -24,6 +28,7 @@ module.exports = (sequelize, DataTypes) ->
         return []
       set: (value) ->
         return this.setDataValue('service', JSON.stringify(value))
+      defaultValue: '["快遞宅配"]'
     }
     # 品牌國別, 日本，大陸，美國
     country: DataTypes.STRING
@@ -33,9 +38,13 @@ module.exports = (sequelize, DataTypes) ->
     color: DataTypes.INTEGER
     # 貨號
     productNumber: DataTypes.STRING
+    # 敘述
+    description: DataTypes.STRING
+    # 產品材質
+    spec: DataTypes.STRING
     # 照片
     photos:
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
       get: () ->
         value = this.getDataValue('photos');
 
@@ -45,7 +54,23 @@ module.exports = (sequelize, DataTypes) ->
 
       set: (value) ->
         return this.setDataValue('photos', JSON.stringify(value))
-  }, classMethods: associate: (models) ->
-    return Product.belongsTo(models.ProductGm)
+    # weight
+    weight: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
 
+    originPrice: {
+      type: DataTypes.VIRTUAL
+    }
+    promotionCountDown: {
+      type: DataTypes.VIRTUAL
+    }
+  },
+  paranoid: true,
+  classMethods: associate: (models) ->
+    Product.belongsTo(models.ProductGm)
+    Product.belongsToMany(models.AdditionalPurchase, {through: 'AdditionalPurchaseProduct'});
+    Product.belongsToMany(models.User, {through: 'UserFavorite'})
+    Product.belongsToMany(models.DptSub, {through: 'DptSubProduct'})
   return Product

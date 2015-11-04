@@ -1,29 +1,58 @@
 import trunk from './trunk'
+import exma from './exma'
+import defaults from './defaults'
+import fs from 'fs-extra';
 
+let production;
+try {
+  production = require('./production');
+} catch (e) {
+}
 
 module.exports = {
+
+  databaseDropAndCreate: async () => {
+    if(sails.config.db.dialect == 'mysql'){
+      await db.sequelize.query(
+        `DROP DATABASE IF EXISTS ${sails.config.db.database};`);
+      await db.sequelize.query(
+        `CREATE DATABASE IF NOT EXISTS ${sails.config.db.database} CHARACTER SET utf8 COLLATE utf8_unicode_ci;`);
+      await db.sequelize.query(`USE ${sails.config.db.database};`);
+    }
+    else if (sails.config.db.dialect == 'sqlite'){
+      await fs.removeSync(sails.config.db.storage);
+    }
+  },
 
   database: async () => {
     let force = sails.config.db.force;
     await db.sequelize.sync({force});
   },
+
   basicData: async () => {
-
-
-
+    var roleUser = {
+      authority: 'user',
+      comment: 'site user'
+    };
+    let roleUserOptions = {where: {authority: 'user'}, defaults: roleUser}
+    var createRoleUser = (await db.Role.findOrCreate(roleUserOptions))[0];
 
     var roleAdmin = {
       authority: 'admin',
       comment: 'site admin'
     };
-    var createRoleAdmin = await db.Role.create(roleAdmin);
+    let roleAdminOptions = {where: {authority: 'admin'}, defaults: roleAdmin}
+    var createRoleAdmin = (await db.Role.findOrCreate(roleAdminOptions))[0];
 
     let admin = {
       username: "admin",
       email: "admin@gmail.com",
-      mobile: "",
-      address: "",
+      mobile: "0900000000",
+      address: "admin",
       comment: "",
+      city: "基隆市",
+      region: "仁愛區",
+      zipcode: 200,
       RoleId: createRoleAdmin.id
     };
     let userOptions = {where: {username: "admin"}, defaults: admin}
@@ -39,13 +68,15 @@ module.exports = {
 
     await db.Passport.findOrCreate(passportOptions);
 
-  }  ,
-  testData: async () => {
+    await createdAdmin.setLikes([1, 2, 3, 4, 5]);
 
-    if(sails.config.initData){
-      if(sails.config.initData === 'trunk')
-        await trunk.createTestData();
-    }
+    if(sails.config.initData === 'production' && production !== undefined)
+      await production.createBasicData();
+
+  },
+
+  // testDate
+  testData: async () => {
 
     var roleUser = {
       authority: 'user',
@@ -53,164 +84,42 @@ module.exports = {
     };
     var createRoleUser = await db.Role.create(roleUser);
 
-
     var newBuyer = {
       username: "buyer",
-      email: "smlsun@gmail.com",
+      email: "buyer@gmail.com",
       password: "buyer",
       RoleId: createRoleUser.id,
       comment: "this is a newBuyer",
-      orderSyncToken:'11111'
-
+      orderSyncToken:'11111',
+      mobile: '0937397377',
+      verification: true
     };
     var createNewBuyer = await db.User.create(newBuyer);
 
-    var newBuyer2 = {
-      username: "buyer2",
-      email: "buyer2@gmail.com",
-      password: "buyer2",
-      RoleId: createRoleUser.id,
-      comment: "this is newBuyer2"
+    let passport = {
+      protocol: 'local',
+      password: "buyer",
+      UserId: createNewBuyer.id
     };
-    var createNewBuyer2 = await db.User.create(newBuyer2);
 
-    var fruitProducts = [{
-      name: '好物三選1',
-      description: '好東西，買買買',
-      stockQuantity: 100,
-      price: 500
-    },{
-      name: '好物三選2',
-      description: '好東西，買買買',
-      stockQuantity: 100,
-      price: 625
-    },{
-      name: '好物三選3',
-      description: '好東西，買買買',
-      stockQuantity: 100,
-      price: 750
-    }];
-    await db.Product.bulkCreate(fruitProducts);
+    await db.Passport.create(passport);
 
-    var newProduct = {
-      name: '超值精選組合',
-      description: '精選組合 - 重金包裝',
-      stockQuantity: 10,
-      price: 100,
-      image: 'http://localhost:1337/images/product/1.jpg',
-      isPublish: true,
-      comment: '限量只有 10 個'
-    };
-    var createdProduct = await db.Product.create(newProduct);
 
-    var newOrder = {
-      serialNumber: '0000000',
-      paymentTotalAmount: 1234.567,
-      quantity: 10,
-      orderId: '1111',
-      UserId: createNewBuyer.id,
-      ProductId: createdProduct.id
-    };
-    var createdOrder = await db.Order.create(newOrder);
+    let params = {createRoleUser, createNewBuyer}
 
-    var shipment = {
-      username: '收件者',
-      mobile: '0922-222-222',
-      taxId: '123456789',
-      email: 'receiver@gmail.com',
-      address: '收件者的家',
-      OrderId: createdOrder.id
+
+
+
+    if(sails.config.initData){
+      if(sails.config.initData === 'trunk')
+        await trunk.createTestData();
+      else if(sails.config.initData === 'exma')
+        await exma.createTestData();
+      else
+        await defaults.createTestData(params);
     }
-    var createShipment = await db.Shipment.create(shipment);
-
-
-    var newOrder2 = {
-      serialNumber: '0000001',
-      paymentIsConfirmed: true,
-      paymentTotalAmount: 1000,
-      paymentConfirmDate: Date.now(),
-      paymentConfirmName: '王小明',
-      paymentConfirmPostfix: '54321',
-      quantity: 5,
-      orderId: '1111',
-      UserId: createNewBuyer.id,
-      ProductId: createdProduct.id
-    };
-    var createdOrder = await db.Order.create(newOrder2);
-
-
-    var brandExample = {
-      name: '好棒棒品牌',
-      avatar: 'http://goo.gl/ksTMyn',
-      type: 'PRIME_GOOD',
-      desc: 'Steve Aoki 最棒惹',
-      banner: 'http://goo.gl/tl4513',
-      photos: [
-        'http://goo.gl/IRT1EM',
-        'http://goo.gl/p9Y2BF'
-      ]
-    };
-
-    var brand = await db.Brand.create(brandExample);
-
-
-    var brandAgent = {
-      name: '好代理品牌',
-      avatar: 'http://goo.gl/ksTMyn',
-      type: 'AGENT',
-      desc: 'Steve Aoki 最喜歡代理惹',
-      banner: 'http://goo.gl/tl4513',
-      photos: [
-        'http://goo.gl/IRT1EM',
-        'http://goo.gl/p9Y2BF'
-      ]
-    };
-
-    var otherAgent = {
-      name: 'Other',
-      avatar: '',
-      type: 'OTHER',
-      desc: '',
-      banner: '',
-      photos: []
-    };
-
-    var brandAgent = await db.Brand.create(brandAgent);
-
-    var otherAgent = await db.Brand.create(otherAgent);
-
-    let dpts = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-    for (let i in dpts) {
-      var dpt = await (db.Dpt.create({
-        name: '館別' + dpts[i],
-        weight: i,
-        official: true,
-      }));
-
-      for (var j=1; j<4; j++) {
-        await db.DptSub.create({
-          name: '小館-' +  dpts[i] + '-' + j,
-          weight: j,
-          official: false,
-          DptId: dpt.id
-        })
-      }
-    }
-    // end create dpt
-
-    // create tag
-    let tags = ['男人', '女人', '兒童', '情人', '學生', '寵物', '旅行', '閱讀', '咖啡', '午茶', '派對', '時尚', '印花', '夏日', '冬季', '聖誕', '森林', '動物', '花園', '浪漫', '可愛', '趣味', '復古', '環保', '工業', '簡約'];
-    for (let i in tags) {
-      await db.Tag.create({
-        name: tags[i]
-      });
-    }
-    // end of create tag
-
-
-    // Greeting Message to New Buyer
-    db.Message.create(CustomMailerService.greeting(newBuyer));
-
+    else
+      await defaults.createTestData(params);
   }
+  // end testData
 }

@@ -1,4 +1,6 @@
-describe("about User", () => {
+import sinon from 'sinon';
+
+describe.skip("about User", () => {
   // start
 
   let testUser = null;
@@ -159,6 +161,81 @@ describe("about User", () => {
       done(err);
     });
   });
-
   // end
+});
+
+describe("none login user api check", () => {
+
+  it('check email is existed', (done) => {
+    request(sails.hooks.http.app)
+    .get('/api/user/verify/' + 'admin@gmail.com')
+    .end((err,res) => {
+      res.statusCode.should.equal(200);
+      res.body.should.be.Object;
+      res.body.result.should.equal('existed');
+      done(err);
+    });
+  });
+
+  it('check email is work', (done) => {
+    request(sails.hooks.http.app)
+    .get('/api/user/verify/' + 'kerkerker@kdkeowl.com.eu')
+    .end((err,res) => {
+      res.statusCode.should.equal(200);
+      res.body.should.be.Object;
+      res.body.result.should.equal('ok');
+      done(err);
+    });
+  });
+});
+
+// test logined user behavior
+describe("login user data", () => {
+
+  var cookie;
+  before( async (done) => {
+    let admin = db.User.find ({
+      where: {username: 'admin'},
+      include: [db.Role]
+    });
+    sinon.stub(UserService, 'getLoginState', (req) => {
+      return true;
+    });
+    sinon.stub(UserService, 'getLoginUser', (req) => {
+      return admin;
+    });
+
+    return done();
+  });
+
+  after( (done) => {
+    UserService.getLoginState.restore();
+    UserService.getLoginUser.restore();
+    done();
+  });
+
+  it('update favorite',(done)=>{
+    request(sails.hooks.http.app)
+    .post(`/favorite/add`)
+    .set('Cookie', "picklete_fav={ 1: true, 2: true}")
+    .end((err, res) => {
+      if (res.statusCode === 500) {
+        return done(err)
+      }
+      done(err);
+    });
+  });
+
+  it('user purchase test', (done) => {
+    request(sails.hooks.http.app)
+    .get('/member/purchase')
+    .end((err,res) => {
+      if(res.statusCode === 500){
+        return done(err);
+      }
+      res.statusCode.should.equal(200);
+      res.body.should.be.Object;
+      done(err);
+    });
+  });
 });

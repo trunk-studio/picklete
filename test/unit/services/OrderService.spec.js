@@ -12,4 +12,18 @@ describe("about order service", () => {
     }
 
   });
+
+  it('date to order SerialNumber2', async (done) => {
+
+    try {
+      let orderSerialNumber = await OrderService.generateOrderSerialNumber();
+      orderSerialNumber.should.be.String
+      done();
+    } catch (e) {
+      done(e);
+    }
+
+  });
+
+  //@TODO , need to add product number and product items
 });

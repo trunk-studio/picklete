@@ -1,7 +1,7 @@
 Sails = require('sails')
 sails = undefined
 
-global.request = require("supertest")
+global.request = require("supertest-as-promised");
 global.should = require("chai").should()
 
 options = {
@@ -30,7 +30,7 @@ before (done) ->
   return
 after (done) ->
   # here you can clear fixtures, etc.
-  sails.lower done
+  sails.lower done()
   return
 
 # ---

@@ -1,0 +1,11 @@
+extends ../_layout_auth
+
+block body
+  h2.m-bottom-6 營收報表
+  form.form-inline(action="/report/export", method="POST", name="report")
+    .form-group
+      select.form-control(name='date')
+        each date in dateList
+          option(value="#{date[0]}-#{date[1]}") #{date[0]} 年 #{date[1]} 月
+    // /form-control
+    button.btn.btn-danger(type='submit') 匯出報表

@@ -21,6 +21,16 @@ module.exports.bootstrap = async (cb) => {
 
     // inject moment for jade views
     sails.moment = require('moment');
+    sails.moment.locale("zh-TW");
+
+    // Development environment
+    /*
+    if (sails.config.environment === 'development') {
+        var app = sails.express.app;
+        app.set('view options', { pretty: true });
+        app.locals.pretty = true;
+    }
+    */
 
     sails.config.mail.mailer = sailsMailer.create(sails.config.mail.type, sails.config.mail.config);
     sails.services.passport.loadStrategies();
@@ -28,10 +38,13 @@ module.exports.bootstrap = async (cb) => {
     let models = require('../api/db');
     global.db = models;
 
+    let createInitData = true;
+    if(sails.config.createInitData !== undefined) createInitData = sails.config.createInitData;
 
     if (sails.config.environment === 'development' || sails.config.environment === 'test') {
+      await init.databaseDropAndCreate();
       await init.database();
-      await init.testData();
+      if(createInitData) await init.testData();
     }
 
     await init.basicData();
