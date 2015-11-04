@@ -112,7 +112,7 @@ module.exports = (grunt) ->
         "views/**/*.html": [".tmp/public/min/production.min.css"]
         "views/**/*.ejs": [".tmp/public/min/production.min.css"]
 
-    
+
     # Bring in JST template object
     devTpl:
       options:
@@ -193,7 +193,7 @@ module.exports = (grunt) ->
       options:
         startTag: "// STYLES"
         endTag: "// STYLES END"
-        fileTmpl: "link(rel=\"stylesheet\", href=\"%s\")"
+        fileTmpl: "link(rel=\"stylesheet\", href=\"/%s\")"
         appRoot: ".tmp/public"
 
       files:
@@ -203,14 +203,14 @@ module.exports = (grunt) ->
       options:
         startTag: "// STYLES"
         endTag: "// STYLES END"
-        fileTmpl: "link(rel=\"stylesheet\", href=\"%s\")"
+        fileTmpl: "link(rel=\"stylesheet\", href=\"/%s\")"
         appRoot: ".tmp/public"
         relative: true
 
       files:
         "views/**/*.jade": [".tmp/public/min/production.min.css"]
 
-    
+
     # Bring in JST template object
     devTplJade:
       options:
