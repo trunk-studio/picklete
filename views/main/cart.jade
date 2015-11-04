@@ -2,7 +2,6 @@ include ../mixins/_product
 extends ../_layout_head
 
 block body
-  -console.log("!!!",sails.config.deliveryTime)
     .container
       h1.text-black.m-top-10.m-bottom-6 #{i18n('shopping-cart')}
       #nothing.border-block-3.m-bottom-10.text-center.p-top-10.p-bottom-10
@@ -118,7 +117,7 @@ block body
                 // /col-sm-4
               // /row
               .row
-              //- span *購物滿390即可享有免運費優惠！
+              span *購買兩件以上享有免運費優惠！
                 span#feeFreeNoticer
               // /row
             // /p-20
