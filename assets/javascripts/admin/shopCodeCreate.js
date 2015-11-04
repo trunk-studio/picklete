@@ -50,7 +50,7 @@ $(function() {
     }
 
     if(userArray.length!=0){
-      userArray.forEach((value) => {
+      userArray.forEach( function(value){
         $("#shopCodeCreateForm").append(
           '<input type=\'hidden\' form=\'shopCodeCreateForm\' name=\'users[]\' value =\''+ value +'\' >'
         );
