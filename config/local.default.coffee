@@ -8,6 +8,7 @@ module.exports = {
   shipment: 'agricloud'
   freeShippingInformation:'*購買兩件以上享有免運費優惠！'
   deliveryTime:[
+    "",
     "2015-11-18",
     "2015-11-25",
     "2015-12-02",
@@ -17,6 +18,7 @@ module.exports = {
     "2015-12-30"
   ]
   deliveryTimeShow:[
+    "",
     "2015-11-16 ~ 2015-11-18",
     "2015-11-23 ~ 2015-11-25",
     "2015-11-30 ~ 2015-12-02",
