@@ -47,6 +47,7 @@ let PaymentController = {
     try {
       console.log('req',req.body);
       let data = req.body;
+      let allpayCheckMacValue = data.CheckMacValue;
       let checkMacValue = allpay.genCheckMacValue(data);
       let find;
       if(sails.config.environment === 'development' || sails.config.environment === 'test' || sails.config.allpay.debug){
@@ -70,7 +71,7 @@ let PaymentController = {
         throw new Error(`${find} 嚴重錯誤!!付款後找不到訂單!!`);
 
       if (!(sails.config.environment === 'development' || sails.config.environment === 'test'|| sails.config.allpay.debug)) {
-        if(checkMacValue != data.CheckMacValue)
+        if(checkMacValue != allpayCheckMacValue)
           throw new Error(`CheckMacError!!`);
       }
       order.TradeNo = data.TradeNo;
@@ -99,6 +100,7 @@ let PaymentController = {
     try {
       let data = req.body;
       console.log("req",req.body);
+      let allpayCheckMacValue = data.CheckMacValue;
       let checkMacValue = allpay.genCheckMacValue(data);
       let find;
       if(sails.config.environment === 'development' || sails.config.environment === 'test' || sails.config.allpay.debug){
@@ -128,11 +130,11 @@ let PaymentController = {
 
       // @TODO: have to fixed checkMac issue
       // if (!(sails.config.environment === 'development' || sails.config.environment === 'test' || sails.config.allpay.debug)) {
-      //   if(checkMacValue != data.CheckMacValue) {
+      //   if(checkMacValue != allpayCheckMacValue) {
       //     // order mark error
       //     throw new Error(`CheckMacError!!`);
       //   }
-          
+
       // }
 
 
