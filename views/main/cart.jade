@@ -87,7 +87,7 @@ block body
                         each time in sails.config.deliveryTime
                           - index ++ 
                           -if( sails.moment(time) > sails.moment())
-                            option(value= index) #{time}
+                            option(value= index) #{sails.config.deliveryTimeShow[index-1]}
                     // /form-group
                   // /col-sm-4
                 .col-sm-4
