@@ -31,6 +31,9 @@ block body
           .m-bottom-10
             if (brand.desc)
               p !{brand.desc.replace(/\n/g, "<br>")}
+              
+            if (brand.link)
+              a.btn.btn-black.border-radius-circle.btn-block.btn-lg(href='#{brand.link}') 瞭解更多
           // /font-size-small
         // /col-md-7
       // /row
