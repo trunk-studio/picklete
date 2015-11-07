@@ -85,11 +85,10 @@ block body
                         option(value='0') #{i18n('select')}
                         -var index = 0;
                         each time in sails.config.deliveryTime
+                          -if(sails.moment(time).valueOf() > sails.moment().valueOf() && time != 'undefined')
+                            option(value= index) #{sails.config.deliveryTimeShow[index]}
                           - index ++ 
-                          -if( sails.moment(time) > sails.moment())
-                            option(value= index) #{time}
-                    // /form-group
-                  // /col-sm-4
+
                 .col-sm-4
                   .form-group
                     label
