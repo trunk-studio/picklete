@@ -155,33 +155,34 @@ block body
           // /col-md-3
         // /row
       // /border-block-3 有東西顯示這個
-      h2.text-black.m-bottom-6 購物滿額，即可以優惠價加購商品
-      .border-block-3.m-bottom-10.p-20
-        .row.row-l
-          each product in additionalPurchaseProducts.additionalProducts
-            .col-md-4.col-sm-6
-              .row.row-m.cart-add-product.cart-add-product-1
-                .col-xs-6
-                  .item-block
-                    a.item-like(href='#')
-                      span.glyphicon.glyphicon-heart
-                    // /item-like
-                    a(href='../shop/products/#{product.ProductGm.id}/#{product.id}?additionalPurchaseId=#{additionalPurchaseProducts.additionalPurchases[0].id}')
-                      img.img-full(src= product.photos[0])
-                  // /item-block
-                // /col-xs-6
-                .col-xs-6
-                  h6.text-muted.text-roboto.letter-spacing-1
-                    a(href='/brands/#{product.ProductGm.Brand.id}') #{product.ProductGm.Brand.name}
-                  h5.h5-two-hide.m-bottom-2.text-roboto.letter-spacing-1
-                    a(href='../shop/products/#{product.ProductGm.id}/#{product.id}?additionalPurchaseId=#{additionalPurchaseProducts.additionalPurchases[0].id}') #{product.name}
-                  //- select.form-control.m-bottom-2
-                  //-   option(value= 0 ,data-price= 0) 選擇規格
-                  //-   each product in additionalPurchaseProductGm.Products
-                  a.btn.btn-green(href= '/user/cart/addAdditionalPurchases?additionalPurchasesId=#{additionalPurchaseProducts.additionalPurchases[0].id}&productId=#{product.id}') 加價購
-                  h4.text-green
-                    | $ #{Math.ceil(product.price)}
-                    small.text-line-through.m-left-1 $ #{product.originPrice}
+      if additionalPurchaseProducts
+        h2.text-black.m-bottom-6 購物滿額，即可以優惠價加購商品
+        .border-block-3.m-bottom-10.p-20
+          .row.row-l
+            each product in additionalPurchaseProducts.additionalProducts
+              .col-md-4.col-sm-6
+                .row.row-m.cart-add-product.cart-add-product-1
+                  .col-xs-6
+                    .item-block
+                      a.item-like(href='#')
+                        span.glyphicon.glyphicon-heart
+                      // /item-like
+                      a(href='../shop/products/#{product.ProductGm.id}/#{product.id}?additionalPurchaseId=#{additionalPurchaseProducts.additionalPurchases[0].id}')
+                        img.img-full(src= product.photos[0])
+                    // /item-block
+                  // /col-xs-6
+                  .col-xs-6
+                    h6.text-muted.text-roboto.letter-spacing-1
+                      a(href='/brands/#{product.ProductGm.Brand.id}') #{product.ProductGm.Brand.name}
+                    h5.h5-two-hide.m-bottom-2.text-roboto.letter-spacing-1
+                      a(href='../shop/products/#{product.ProductGm.id}/#{product.id}?additionalPurchaseId=#{additionalPurchaseProducts.additionalPurchases[0].id}') #{product.name}
+                    //- select.form-control.m-bottom-2
+                    //-   option(value= 0 ,data-price= 0) 選擇規格
+                    //-   each product in additionalPurchaseProductGm.Products
+                    a.btn.btn-green(href= '/user/cart/addAdditionalPurchases?additionalPurchasesId=#{additionalPurchaseProducts.additionalPurchases[0].id}&productId=#{product.id}') 加價購
+                    h4.text-green
+                      | $ #{Math.ceil(product.price)}
+                      small.text-line-through.m-left-1 $ #{product.originPrice}
 
     #modal-delete.modal.fade
       .modal-dialog(role='document')

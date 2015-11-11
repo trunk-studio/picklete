@@ -165,7 +165,7 @@ let UserController = {
           paymentTotalAmount += parseInt(orderItem.quantity, 10) * parseInt(orderItem.price, 10);
         });
       }
-      let slesctedAdditionalPurchases=[];
+      let slesctedAdditionalPurchases;
       if(picklete_cart && picklete_cart.hasOwnProperty('additionalPurchasesItem')){
         slesctedAdditionalPurchases = await AdditionalPurchaseService.cartAddAdditionalPurchases(picklete_cart.additionalPurchasesItem);
         picklete_cart.buymore = slesctedAdditionalPurchases.buyMoreTotalPrice;
@@ -177,7 +177,9 @@ let UserController = {
 
       let date = new Date();
       let query = {date, paymentTotalAmount};
-      let additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
+      let additionalPurchaseProducts;
+      if(slesctedAdditionalPurchases && slesctedAdditionalPurchases.additionalPurchasesItems.length < 1)
+        additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
       // add an item for Shippings
       let shippings = await ShippingService.findAll();
       // console.log('=== shippings ==>',shippings);
@@ -212,7 +214,7 @@ let UserController = {
           let {message} = e;
           res.serverError({message});
         }
-        
+
         picklete_cart.additionalPurchasesItem = picklete_cart.additionalPurchasesItem ? picklete_cart.additionalPurchasesItem : [];
 
         picklete_cart.additionalPurchasesItem.push({
