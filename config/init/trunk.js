@@ -31,7 +31,8 @@ module.exports.createTestData = async () => {
     photos: [
       'http://goo.gl/IRT1EM',
       'http://goo.gl/p9Y2BF'
-    ]
+    ],
+    link: 'http://yahoo.com'
   },{
     name: '朱清輝先生',
     avatar: 'http://dev.agricloud.cc:3000/img/portrait1.jpg',
@@ -152,7 +153,7 @@ module.exports.createTestData = async () => {
   let companyObj = {
     avatar: "https://lh3.googleusercontent.com/trLzZYhuCnQz6gl_QM0XIPRWp9ty0ZMGe59vFnAF_iHp=s0",
     name: "agricloud",
-    fullname: "創毅資訊股份有限公司",
+    fullname: "雲端農場",
     email: "hq@picklete.com",
     desc: "週一至週五 早上10:00 -下午5:00",
     line: "https://dl.dropboxusercontent.com/u/9662264/iplusdeal/images/contact.png"

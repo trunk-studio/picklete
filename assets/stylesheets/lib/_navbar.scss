@@ -170,7 +170,7 @@
   text-indent: -9999px;
   text-decoration: none;
   background-image: url("../images/logo.png");
-  background-image: none, url("../images/logo.svg");
+  background-image: none, url("../images/logo.png");
   background-size: 60px 65px;
   background-repeat: no-repeat;
   margin: 17px $navbar-padding-horizontal 18px $navbar-padding-horizontal;
@@ -745,7 +745,7 @@
       width: 60px;
       height: 65px;
       background-image: url("../images/logo.png");
-      background-image: none, url("../images/logo.svg");
+      background-image: none, url("../images/logo.png");
       background-size: 60px 65px;
     }
     .dropdown-menu-full {
@@ -759,7 +759,7 @@
         width: 120px;
         height: 34px;
         background-image: url("../images/logo-s.png");
-        background-image: none, url("../images/logo-s.svg");
+        background-image: none, url("../images/logo-s.png");
         background-size: 120px 34px;
         margin: 16px 15px;
         @media (min-width: $grid-float-breakpoint) {
@@ -796,7 +796,7 @@
     width: 120px;
     height: 34px;
     background-image: url("../images/logo-s.png");
-    background-image: none, url("../images/logo-s.svg");
+    background-image: none, url("../images/logo-s.png");
     background-size: 120px 34px;
     margin: 8px 15px 8px 0;
   }

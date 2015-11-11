@@ -301,7 +301,7 @@ OrderController = {
 
       if (!userData) {
         return res.serverError({
-          msg: '再確認一下喔，驗證碼錯誤哟 :)！'
+          msg: '查無相關 email 訂單資訊，麻煩確認 :)！'
         });
       }
 
