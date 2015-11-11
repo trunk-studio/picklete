@@ -43,9 +43,12 @@ module.exports = {
         additional.Products.forEach((product) => {
           product.originPrice = product.price;
           if(additional.type == 'reduce'){
-            product.price = additional.reducePrice;
+            product.price = product.price - additional.reducePrice;
           }else{
-            product.price = product.price * additional.discount;
+            if(additional.discount > 10)
+              product.price = product.price * (additional.discount * 0.01);
+            else
+              product.price = product.price * (additional.discount * 0.1);
           }
           additionalProducts.push(product);
         });
@@ -85,11 +88,14 @@ cartAddAdditionalPurchases: async(additionalPurchasesItems) => {
         });
         find.originPrice = find.Products[0].price;
         if(find.type == 'reduce')
-          find.price = find.reducePrice;
+          find.price = find.originPrice - find.reducePrice;
         else{
-          find.price = find.originPrice * find.discount;
+          if(find.discount > 10)
+            find.price = find.originPrice * (find.discount * 0.01);
+          else
+            find.price = find.originPrice * (find.discount * 0.1);
         }
-        buyMoreTotalPrice += find.price ;
+        buyMoreTotalPrice += Math.ceil(find.price) ;
         return find;
       });
       sails.log.info("=== additionalPurchasesItems ===",JSON.stringify(additionalPurchasesItems,null,2));
