@@ -35,8 +35,8 @@ module.exports = {
               model: db.Brand,
             }
           }
-        }]
-
+        }],
+        limit: 6
       });
       let additionalProducts = [];
       additionalPurchases.forEach((additional) => {
@@ -56,8 +56,6 @@ module.exports = {
       });
 
       return {additionalProducts,additionalPurchases};
-
-
     } catch (e) {
 
       throw e;

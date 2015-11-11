@@ -82,7 +82,7 @@ block body
       thead
         tr
           th
-            input(type='checkbox')
+            input.selectAll(type='checkbox')
           th 主圖
           th
             | 商品名稱
@@ -117,9 +117,10 @@ block body
                   span.text-danger #{Math.ceil(product.price * query.discount * 0.01)}
                 else
                   span.text-danger #{Math.ceil(product.price * query.discount * 0.1)}
+                
   hr.dashed-line
   +pagination-simple-pager(page, totalPages, limit)
   // /text-center
 block js
   script(src='/javascripts/common/pagination.js')
-  script(src="/javascripts/admin/shopDiscount.js")
+  script(src="/javascripts/admin/buymore.js")

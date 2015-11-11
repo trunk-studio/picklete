@@ -99,6 +99,7 @@ let PaymentController = {
     try {
       let data = req.body;
       console.log("req",req.body);
+      let checkMacValue = allpay.genCheckMacValue(data);
       let find;
       if(sails.config.environment === 'development' || sails.config.environment === 'test' || sails.config.allpay.debug){
         find = data.MerchantTradeNo.replace(sails.config.allpay.merchantID,"");
@@ -125,10 +126,14 @@ let PaymentController = {
       if(!order)
         throw new Error(`${find} 找不到訂單!!`);
 
-      if (!(sails.config.environment === 'development' || sails.config.environment === 'test' || sails.config.allpay.debug)) {
-        if(checkMacValue != data.CheckMacValue)
-          throw new Error(`CheckMacError!!`);
-      }
+      // @TODO: have to fixed checkMac issue
+      // if (!(sails.config.environment === 'development' || sails.config.environment === 'test' || sails.config.allpay.debug)) {
+      //   if(checkMacValue != data.CheckMacValue) {
+      //     // order mark error
+      //     throw new Error(`CheckMacError!!`);
+      //   }
+          
+      // }
 
 
       order.allPayRtnCode = data.RtnCode;
@@ -155,6 +160,13 @@ let PaymentController = {
       result.bankId = data.BankCode;
       result.bankAccountId = data.vAccount;
       result.order = order;
+
+      if (result.allPayPaymentType.toLowerCase().indexOf("credit") > -1) {
+        result.paymentMethod = "信用卡 / 付款狀態：已完成付款";
+      } else {
+        result.paymentMethod = "ATM繳款/ " + result.bankId + " 帳號 " + result.bankAccountId;
+      }
+
 
       let messageConfig = await CustomMailerService.orderConfirm(result);
       let message = await db.Message.create(messageConfig);
