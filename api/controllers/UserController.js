@@ -165,21 +165,23 @@ let UserController = {
           paymentTotalAmount += parseInt(orderItem.quantity, 10) * parseInt(orderItem.price, 10);
         });
       }
-      let slesctedAdditionalPurchases;
+      let date = new Date();
+      let query = {date, paymentTotalAmount};
+      let additionalPurchaseProducts;
+      let slesctedAdditionalPurchases=[];
       if(picklete_cart && picklete_cart.hasOwnProperty('additionalPurchasesItem')){
         slesctedAdditionalPurchases = await AdditionalPurchaseService.cartAddAdditionalPurchases(picklete_cart.additionalPurchasesItem);
         picklete_cart.buymore = slesctedAdditionalPurchases.buyMoreTotalPrice;
         res.cookie('picklete_cart', JSON.stringify(picklete_cart));
+        if(picklete_cart.additionalPurchasesItem < 1)
+          additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
+      }else{
+        additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
       }
 
       let company = await db.Company.findOne();
       let brands = await db.Brand.findAll();
 
-      let date = new Date();
-      let query = {date, paymentTotalAmount};
-      let additionalPurchaseProducts;
-      if(slesctedAdditionalPurchases && slesctedAdditionalPurchases.additionalPurchasesItems.length < 1)
-        additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
       // add an item for Shippings
       let shippings = await ShippingService.findAll();
       // console.log('=== shippings ==>',shippings);
