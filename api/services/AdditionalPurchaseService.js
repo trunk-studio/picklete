@@ -95,7 +95,7 @@ cartAddAdditionalPurchases: async(additionalPurchasesItems) => {
           else
             find.price = find.originPrice * (find.discount * 0.1);
         }
-        buyMoreTotalPrice += find.price ;
+        buyMoreTotalPrice += Math.ceil(find.price) ;
         return find;
       });
       sails.log.info("=== additionalPurchasesItems ===",JSON.stringify(additionalPurchasesItems,null,2));

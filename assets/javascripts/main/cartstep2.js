@@ -75,7 +75,7 @@
       buymore += item.price;
     });
   }
-  buymoreDiv.text(buymore);
+  buymoreDiv.text(Math.ceil(buymore));
 
   picklete_cart.orderItems.forEach(function(orderItem, index){
     subtotal += parseInt(orderItem.price*orderItem.quantity, 10);
@@ -143,7 +143,7 @@
         alert("請輸入公司抬頭");
         $("input[name='order[invoice][title]']").focus();
         return;
-      } 
+      }
       if ($("input[name='order[invoice][taxId]']").val() == "") {
         alert("請輸入統一編號");
         $("input[name='order[invoice][taxId]']").focus();

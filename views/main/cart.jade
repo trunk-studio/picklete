@@ -51,7 +51,7 @@ block body
                         |     
                         .col-xs-6.col-sm-2.col-md-2.desktop-text-center.desktop-m-top-5.m-bottom-1
                           h4.text-green
-                            | $ #{item.price}
+                            | $ #{Math.ceil(item.price)}
                             small.text-line-through.m-left-1 $ #{item.originPrice}
                         |     
                         .col-xs-6.col-sm-1.col-md-1.text-right.desktop-m-top-5
@@ -132,7 +132,7 @@ block body
                       span#discountAmount.text-danger(data-value='0') 0
                   tr
                     th #{i18n('increase-purchase')}
-                    td#buymore.text-right(data-value='0') #{slesctedAdditionalPurchases.buyMoreTotalPrice || '0'} 
+                    td#buymore.text-right(data-value='0') #{Math.ceil(slesctedAdditionalPurchases.buyMoreTotalPrice) || '0'} 
                   tr
                     th #{i18n('total')}
                     td.text-right
@@ -180,7 +180,7 @@ block body
                   //-   each product in additionalPurchaseProductGm.Products
                   a.btn.btn-green(href= '/user/cart/addAdditionalPurchases?additionalPurchasesId=#{additionalPurchaseProducts.additionalPurchases[0].id}&productId=#{product.id}') 加價購
                   h4.text-green
-                    | $ #{product.price}
+                    | $ #{Math.ceil(product.price)}
                     small.text-line-through.m-left-1 $ #{product.originPrice}
 
     #modal-delete.modal.fade

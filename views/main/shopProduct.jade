@@ -92,9 +92,7 @@ block body
                   else
                     h3.text-black.m-bottom-4
                       span.text-green 加價購 #{UtilService.numberFormat(additionalPurchasePrice)}
-                      small.text-line-through.m-left-1#originPrice #{UtilService.numberFormat(product.price)}
-                      //- span.text-danger #{UtilService.numberFormat(product.price)}
-                      //- small.text-line-through.m-left-1#originPrice #{UtilService.numberFormat(product.originPrice)}
+                      small.text-line-through.m-left-1#originPrice #{UtilService.numberFormat(product.originPrice)}
                     //- h4(class="promo-end text-danger m-bottom-10 countdown", data-end='#{product.discountEndDate}') 活動倒數 
                     //-   span 
                 // /col-sm-10
