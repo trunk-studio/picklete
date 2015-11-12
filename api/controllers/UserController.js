@@ -165,19 +165,23 @@ let UserController = {
           paymentTotalAmount += parseInt(orderItem.quantity, 10) * parseInt(orderItem.price, 10);
         });
       }
+      let date = new Date();
+      let query = {date, paymentTotalAmount};
+      let additionalPurchaseProducts;
       let slesctedAdditionalPurchases=[];
       if(picklete_cart && picklete_cart.hasOwnProperty('additionalPurchasesItem')){
         slesctedAdditionalPurchases = await AdditionalPurchaseService.cartAddAdditionalPurchases(picklete_cart.additionalPurchasesItem);
         picklete_cart.buymore = slesctedAdditionalPurchases.buyMoreTotalPrice;
         res.cookie('picklete_cart', JSON.stringify(picklete_cart));
+        if(picklete_cart.additionalPurchasesItem < 1)
+          additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
+      }else{
+        additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
       }
 
       let company = await db.Company.findOne();
       let brands = await db.Brand.findAll();
 
-      let date = new Date();
-      let query = {date, paymentTotalAmount};
-      let additionalPurchaseProducts = await AdditionalPurchaseService.getProducts(query);
       // add an item for Shippings
       let shippings = await ShippingService.findAll();
       // console.log('=== shippings ==>',shippings);
@@ -204,18 +208,14 @@ let UserController = {
       let data = req.query;
       let picklete_cart = req.cookies.picklete_cart;
       if(picklete_cart != undefined){
-        
+
         try {
-          picklete_cart = JSON.parse(picklete_cart);  
+          picklete_cart = JSON.parse(picklete_cart);
         } catch (e) {
           console.error(e.stack);
           let {message} = e;
           res.serverError({message});
         }
-        
-        // if(picklete_cart.hasOwnProperty('additionalPurchasesItem')) {
-        //   picklete_cart.additionalPurchasesItem = [];
-        // }
 
         picklete_cart.additionalPurchasesItem = picklete_cart.additionalPurchasesItem ? picklete_cart.additionalPurchasesItem : [];
 
@@ -223,7 +223,7 @@ let UserController = {
           additionalPurchasesId: data.additionalPurchasesId,
           productId: data.productId
         });
-        
+
         res.cookie('picklete_cart', JSON.stringify(picklete_cart));
       }
       res.redirect("/user/cart");
