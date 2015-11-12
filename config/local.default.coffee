@@ -116,7 +116,7 @@ module.exports = {
       options:{
         clientID: '1598226980388780'
         clientSecret: '71ae89eba342ce5a48a30a870d6bd473'
-        scope: [ 'email', 'public_profile' ]
+        profileFields: [ 'id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified' ]
         callbackURL: "http://localhost:1337/auth/facebook/callback"
       }
     }
