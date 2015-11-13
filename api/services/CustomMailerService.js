@@ -58,7 +58,8 @@ module.exports = {
         productName: productsName.join('、'),
         serviceMail: sails.config.store.serviceMail,
         paymentMethod: result.paymentMethod,
-        deliveryDate: sails.moment(result.order.Shipment.deliveryTimeType).format('YYYY/MM/DD')
+        deliveryDate: sails.moment(result.order.Shipment.deliveryTimeType).add(1, 'day').format('YYYY/MM/DD')+ ' ~ '
+                    + sails.moment(result.order.Shipment.deliveryTimeType).add(3, 'day').format('YYYY/MM/DD')
         // fullName: result.order.User.username,
         // orderSerialNumber: result.order.serialNumber,
         // productName: productsName.join('、'),

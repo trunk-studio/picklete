@@ -34,12 +34,13 @@ module.exports.mail = {
       <br />
       <br />預計出貨日：
       <br />%(deliveryDate)s
+      <br />柳丁週一出貨，柳丁汁週一、週三出貨
       <br />
       <br />為了保障您的資料安全，請登入會員中心查詢90天內所有訂單詳細資訊。
       <br />祝您購物愉快
       <br />此為系統信件，請勿直接回覆此信件
       <br />---
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />客服信箱：%(serviceMail)s
       <br />上班時間：週一至週五，10.00AM - 5.00PM，比照國定休假日
       </body></html>"""
@@ -63,7 +64,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />i+DEAL創而有意 | 好物慢慢選
+      <br />i+DEAL創而有意 | 雲端農場
       <br />
       <br />客服信箱：service@wevo.com.tw
       <br />上班時間：週一至週五，10.00AM - 5.00PM，比照國定休假日
@@ -86,7 +87,7 @@ module.exports.mail = {
 
       ---
 
-      %(storeName)s | 好物慢慢選
+      %(storeName)s | 雲端農場
 
       客服信箱：%(serviceMail)s
 
@@ -108,7 +109,7 @@ module.exports.mail = {
 
       ---
 
-      %(storeName)s | 好物慢慢選
+      %(storeName)s | 雲端農場
 
       客服信箱：%(serviceMail)s
 
@@ -147,7 +148,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -169,7 +170,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -192,7 +193,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -217,7 +218,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -248,7 +249,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -271,7 +272,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -296,7 +297,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
