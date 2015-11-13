@@ -13,7 +13,7 @@
 	"filing-date": "建檔日期",
 	"brand-list": "農場列表",
 	"prime-brand": "主打農場",
-	"other-brand": "其他農場",
+	"other-brand": "雲端農場",
 	"create-brand": "建立農場",
 	"brand-classification": "農產分類",
 	"brand-manager": "農場管理",
@@ -65,5 +65,5 @@
 	"next-step": "下一步",
 	"write-data": "填寫資料",
 	"continue-shopping": "繼續購物",
-	"other-brand": "雲端農場"
+	"agent-brand": "agent-brand"
 }
