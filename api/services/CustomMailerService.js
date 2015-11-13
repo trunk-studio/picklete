@@ -19,9 +19,9 @@ module.exports = {
 
       mailSendConfig.html = sprintf(mailSendConfig.html, {
         fullName: user.fullName,
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3:sails.config.store.name3,
+        storeName: sails.config.store.name  || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3:sails.config.store.name3 || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
@@ -47,9 +47,9 @@ module.exports = {
 
       mailSendConfig.subject = sprintf(mailSendConfig.subject, {orderSerialNumber: result.order.serialNumber});
       mailSendConfig.html = sprintf(mailSendConfig.html, {
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3:sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3:sails.config.store.name3 || "",
         orderTime: sails.moment(result.order.createdAt).format('YYYY/MM/DD HH:mm:ss'),
         shipmentUsername: result.order.User.fullName,
         shipmentId: result.order.User.email,
@@ -70,7 +70,7 @@ module.exports = {
         // paymentTotalAmount: result.order.paymentTotalAmount,
         // shipmentUsername: result.order.Shipment.username,
         // shipmentAddress: result.order.Shipment.address,
-        // storeName: sails.config.store.name,
+        // storeName: sails.config.store.name || "",
         // orderConfirmLink
       });
 
@@ -101,7 +101,7 @@ module.exports = {
       mailSendConfig.html = sprintf(mailSendConfig.html, {
         syncLink,
         email,
-        storeName: sails.config.store.name,
+        storeName: sails.config.store.name || "",
         fullName: user.username
       });
 
@@ -123,9 +123,9 @@ module.exports = {
       mailSendConfig.subject = sprintf(mailSendConfig.subject, {orderSerialNumber: order.serialNumber});
       mailSendConfig.text = sprintf(mailSendConfig.text, {
 
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3:sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3:sails.config.store.name3 || "",
         paymentTotalAmount: order.paymentTotalAmount,
         orderSerialNumber: order.serialNumber,
         serviceMail: sails.config.store.serviceMail,
@@ -150,9 +150,9 @@ module.exports = {
       mailSendConfig.subject = sprintf(mailSendConfig.subject, {orderSerialNumber: order.serialNumber});
       mailSendConfig.text = sprintf(mailSendConfig.text, {
 
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3:sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3:sails.config.store.name3 || "",
         paymentTotalAmount: order.paymentTotalAmount,
         orderSerialNumber: order.serialNumber,
         serviceMail: sails.config.store.serviceMail,
@@ -223,15 +223,15 @@ module.exports = {
       var email = user.email;
       var mailSendConfig = {...checkForgotTpl, from: sails.config.mail.config.from, to: email};
       mailSendConfig.subject = sprintf(mailSendConfig.subject, {
-        storeName: sails.config.store.name
+        storeName: sails.config.store.name || ""
       });
 
       mailSendConfig.html = sprintf(mailSendConfig.html, {
         fullName: user.fullName,
         link: link,
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3:sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3:sails.config.store.name3 || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
@@ -258,9 +258,9 @@ module.exports = {
         createdAt: sails.moment(passport.updatedAt).format('YYYY/MM/DD HH:mm:ss'),
         userId: user.email,
         password: password,
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3: sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3: sails.config.store.name3 || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
@@ -285,9 +285,9 @@ module.exports = {
       mailSendConfig.html = sprintf(mailSendConfig.html, {
         fullName: user.fullName,
         link: link,
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3:sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3:sails.config.store.name3 || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
@@ -313,9 +313,9 @@ module.exports = {
         fullName: user.fullName,
         createdAt: sails.moment(new Date()).format('YYYY/MM/DD HH:mm:ss'),
         userId: user.email,
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3: sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3: sails.config.store.name3 || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
@@ -345,9 +345,9 @@ module.exports = {
         shopCodeSentContent: shopCode.sentContent || '',
         startDate: moment(shopCode.startDate).format('YYYY/MM/DD'),
         endDate: moment(shopCode.endDate).format('YYYY/MM/DD'),
-        storeName: sails.config.store.name,
-        storeName2: sails.config.store.name2,
-        storeName3: sails.config.store.name3,
+        storeName: sails.config.store.name || "",
+        storeName2: sails.config.store.name2 || "",
+        storeName3: sails.config.store.name3 || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
@@ -371,7 +371,7 @@ module.exports = {
 
       mailSendConfig.subject = sprintf(mailSendConfig.subject, {
         userName: user.name,
-        storeName: sails.config.store.name
+        storeName: sails.config.store.name || ""
       });
 
       mailSendConfig.html = sprintf(mailSendConfig.html, {
@@ -380,7 +380,7 @@ module.exports = {
         userContact: user.contact,
         userIssue: user.issue,
         userQuestion: user.question.replace(/\n/g, '<br>'),
-        storeName: sails.config.store.name,
+        storeName: sails.config.store.name || "",
         serviceMail: sails.config.store.serviceMail,
       });
 
