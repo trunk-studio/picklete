@@ -64,7 +64,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />i+DEAL創而有意 | 雲端農場
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：service@wevo.com.tw
       <br />上班時間：週一至週五，10.00AM - 5.00PM，比照國定休假日
