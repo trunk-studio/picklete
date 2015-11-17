@@ -164,11 +164,11 @@
     Cookies.set('picklete_cart', picklete_cart);
     dropdownCartInit();
 
-    // if(mobileAndTabletcheck()){
+    if(mobileAndTabletcheck()){
       if (confirm("立即前往結帳嗎？") == true) {
         window.location = "/user/cart";
       }
-    // }
+    }
 
   });
 

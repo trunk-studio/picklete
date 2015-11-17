@@ -7,6 +7,7 @@ module.exports = {
   cookieVersion:'0.1'
   shipment: 'agricloud'
   freeShippingInformation:'*購買兩件以上享有免運費優惠！'
+  mailRemarks:'麻煩請於出貨前三天前匯款，未在時間匯款，出貨時間將移至下週出貨(每筆訂單有7天匯款時間，逾時系統會取消訂單)，造成不便請多見諒。'
   deliveryTime:[
     "",
     "2015-11-18",
