@@ -39,6 +39,15 @@ html
             span.icon-bar
             |         
             span.icon-bar
+          a.dropdown-toggle.navbar-toggle.navbar-icon(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+            span.glyphicon.glyphicon-shopping-cart.m-right-1.font-size-slarge
+            span.text-green 
+              span#order-items-count 0
+          //
+            dropdown-cart
+            ==================================================
+          ul.dropdown-menu.dropdown-menu-right.dropdown-cart
+            .dropdown-cart-content#dropdown-cart-content
           |       
           a.navbar-brand(href='/') #{company.name}
         // /navbar-header
