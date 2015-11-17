@@ -2,16 +2,10 @@
 
   var FAV_KEY = "picklete_fav";
 
-  if ('ontouchstart' in document.documentElement) {
-    // if mobile we we use a backdrop because click events don't delegate
-    $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus)
-  }
-
-  $('#yourId').on('hidden.bs.dropdown', function (){
-    $(this).click(function (event) {
-       $('.dropdown-toggle').dropdown('toggle');
-    });
-  });
+  // if ('ontouchstart' in document.documentElement) {
+  //   // if mobile we we use a backdrop because click events don't delegate
+  //   $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus)
+  // }
 
   // add to favorite
   $(".container").on("click", ".item-like, .label-like", function (e) {
@@ -155,13 +149,13 @@
 
     // check product is added, it will added to same data
     var isTheSame = false;
-    picklete_cart.orderItems.forEach(function(orderItem) {
+    for(var orderItem of picklete_cart.orderItems) {
       if(orderItem.ProductId == addProduct.ProductId) {
         isTheSame = true;
         orderItem.quantity = (parseInt(orderItem.quantity,10) + parseInt(addProduct.quantity,10)).toString();
-        return;
+        break;
       }
-    });
+    }
 
     if( !isTheSame ) {
       picklete_cart.orderItems.push(addProduct);
@@ -228,7 +222,6 @@
 
     });
 
-
     var liEnd =
       '<li>' +
       '  <div class="row">' +
@@ -240,23 +233,19 @@
       '</li>';
 
     dropdownCart.append(liEnd);
-
-
-    console.log('=== dropdownCartInit finish ===');
-
-
-  }
+  };
 
   dropdownCartInit();
-  if($("#verification").attr("data-verification")){
-    $(this).notifyMe(
-      'top',
-      'cart',
-      '<span class="glyphicon glyphicon-ok-circle m-right-2"></span>帳號已開通',
-      '',
-      500,
-      3000
-    );
-  }
+
+  // if($("#verification").attr("data-verification")){
+  //   $(this).notifyMe(
+  //     'top',
+  //     'cart',
+  //     '<span class="glyphicon glyphicon-ok-circle m-right-2"></span>帳號已開通',
+  //     '',
+  //     500,
+  //     3000
+  //   );
+  // }
 
 }(jQuery));
