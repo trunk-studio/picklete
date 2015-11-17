@@ -4746,6 +4746,19 @@ tbody.collapse.in {
   left: auto;
   right: 23px;
 }
+
+/**/
+.dropdown-menu.dropdown-menu-right.mobilde-car:before {
+  left: auto;
+  right: 90px !important;
+}
+/* line 76, ../sass/_dropdowns.scss */
+.dropdown-menu.dropdown-menu-right.mobilde-car:after {
+  left: auto;
+  right: 91px !important;
+}
+/**/
+
 /* line 82, ../sass/_dropdowns.scss */
 .dropdown-menu.dropdown-menu-noborder:before, .dropdown-menu.dropdown-menu-noborder:after {
   display: none;
@@ -4951,6 +4964,10 @@ tbody.collapse.in {
 /* line 317, ../sass/_dropdowns.scss */
 .dropdown-cart li h5 {
   margin-top: 3px;
+}
+
+.dropdown-cart.mobilde-car{
+  right: 0px !important;
 }
 
 /* line 6, ../sass/_button-groups.scss */
@@ -5840,6 +5857,7 @@ tbody.collapse.in {
 }
 
 /* line 201, ../sass/_navbar.scss */
+
 .navbar-toggle {
   position: relative;
   float: right;
@@ -5850,6 +5868,19 @@ tbody.collapse.in {
   background-color: transparent;
   background-image: none;
   border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.navbar-icon {
+  position: relative;
+  float: right;
+  margin-right: 15px;
+  padding: 6px 10px 9px;
+  margin-top: 33px;
+  margin-bottom: 33px;
+  background-color: transparent;
+  background-image: none;
+  border: 0px solid transparent;
   border-radius: 4px;
 }
 /* line 214, ../sass/_navbar.scss */
