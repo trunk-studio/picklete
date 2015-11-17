@@ -10342,7 +10342,7 @@ body.control-panel-page .footer {
 /* line 10, ../sass/_navmenu.scss */
 .navmenu,
 .navbar-offcanvas {
-  width: 300px;
+  width: 250px;
   height: 100%;
   border-width: 1px;
   border-style: solid;
