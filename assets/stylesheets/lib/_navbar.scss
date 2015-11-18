@@ -198,6 +198,18 @@
 // Custom button for toggling the `.navbar-collapse`, powered by the collapse
 // JavaScript plugin.
 
+.navbar-icon {
+  position: relative;
+  float: right;
+  margin-right: $navbar-padding-horizontal;
+  padding: 6px 10px 9px;
+  @include navbar-vertical-align(34px);
+  background-color: transparent;
+  background-image: none;
+  border: 0px solid transparent;
+  border-radius: $border-radius-base;
+}
+
 .navbar-toggle {
   position: relative;
   float: right;

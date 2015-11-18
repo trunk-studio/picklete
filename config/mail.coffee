@@ -27,7 +27,8 @@ module.exports.mail = {
       <br />訂單編號：%(orderSerialNumber)s
       <br />付款方式：
       <br />%(paymentMethod)s
-      <br />付款方式備注：為避免取消訂單，請於%(deadLine)s前繳款完畢
+      <br />付款方式備注：為避免取消訂單，%(deadLine)s
+      <br />
       <br />
       <br />訂購項目：
       <br />%(productName)s
