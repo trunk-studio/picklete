@@ -130,6 +130,8 @@ module.exports = {
         paymentTotalAmount: order.paymentTotalAmount,
         orderSerialNumber: order.serialNumber,
         serviceMail: sails.config.store.serviceMail,
+        deliveryDate: sails.moment(order.Shipment.deliveryTimeType).add(1, 'day').format('YYYY/MM/DD')+ ' ~ '
+                    + sails.moment(order.Shipment.deliveryTimeType).add(3, 'day').format('YYYY/MM/DD')
       });
 
       mailSendConfig.type = 'paymentConfirm';

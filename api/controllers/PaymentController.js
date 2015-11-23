@@ -62,9 +62,12 @@ let PaymentController = {
         where:{
           id: find
         },
-        include:{
-          model: db.User
-        }
+        include:[{
+            model: db.User
+          },{
+            model: db.Shipment
+          }
+        ]
       });
 
       if(!order)
