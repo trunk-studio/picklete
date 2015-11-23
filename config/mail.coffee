@@ -67,7 +67,7 @@ module.exports.mail = {
       <br />
       <br />%(storeName)s | 雲端農場
       <br />
-      <br />客服信箱：service@wevo.com.tw
+      <br />客服信箱：%(serviceMail)s
       <br />上班時間：週一至週五，10.00AM - 5.00PM，比照國定休假日
       <br />
       </body></html>"""
@@ -80,7 +80,10 @@ module.exports.mail = {
 
       您於%(storeName3)s平台消費%(paymentTotalAmount)s元，已使用(信用卡/ATM/超商繳款)完成付款。
 
-      訂單編號：%(orderSerialNumber)s ，我們將於確認定單後盡快為您出貨，謝謝您的惠顧。
+      訂單編號：%(orderSerialNumber)s
+
+      預計出貨日：%(deliveryDate)s，我們將於確認定單後盡快為您出貨，謝謝您的惠顧。
+      柳丁週一出貨，柳丁汁週一、週三出貨
 
       為了保障您的資料安全，請登入會員中心查詢90天內所有訂單詳細資訊。
 
