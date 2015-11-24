@@ -8,8 +8,11 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no', data-gatracking-id="#{locals.gaTrackingID}")
     // Open Graph
     meta(property="fb:app_id" content="914100978637850")
-    meta(property="og:site_name" content="雲端農場")
+    meta(property="og:site_name" content="#{company.title} - #{company.name}")
     meta(property="og:type" content="shop")
+    meta(property="og:url" content="#{req.baseUrl}#{req.originalUrl}")
+    
+    block head
     // Fav and touch icons
     link(rel='shortcut icon', href='/images/ico/favicon.ico', type='image/x-icon')
     // Style

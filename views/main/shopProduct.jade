@@ -1,9 +1,9 @@
 include ../mixins/_product
 extends ../_layout_head
 block head
-  meta(property="og:title" content="#{productGm.name} #{name}")
-  meta(property="og:description" content="!{productGm.Brand.desc.replace(/\n/g, '<br>')}")
-  
+  meta(property="og:title" content="#{productGm.name}")
+  meta(property="og:description" content="#{productGm.Brand.desc} - #{product.ProductGm.explain}")
+  meta(property="og:image" content="#{coverPhotos[0]}")
 
 block body
     #cbp-so-scroller.cbp-so-scroller
