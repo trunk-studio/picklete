@@ -8,9 +8,9 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no', data-gatracking-id="#{locals.gaTrackingID}")
     // Open Graph
     meta(property="fb:app_id" content="914100978637850")
-    meta(property="og:site_name" content="#{company.title} - #{company.name}")
     meta(property="og:type" content="shop")
-    meta(property="og:url" content="#{req.baseUrl}#{req.originalUrl}")
+    meta(property="og:site_name" content="#{company.name}")
+    meta(property="og:url" content="#{sails.config.domain}#{req.originalUrl}")
     
     block head
     // Fav and touch icons

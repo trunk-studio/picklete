@@ -1,6 +1,7 @@
 extends ../_layout_head
 block head
-  meta(property="og:title" content="問與答")
+  meta(property="og:title" content="#{FAQTypes[0]}.name")
+  meta(property="og:description" content="#{FAQTypes}")
 
 block body
   .container
