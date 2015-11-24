@@ -271,6 +271,7 @@ let ShopController = {
           additionalPurchase
          };
          console.log("hihihi",resData);
+         console.log("======================\nreq is=>",req);
         return res.view("main/shopProduct", resData);
 
       }
