@@ -1,5 +1,6 @@
 module.exports = (grunt) ->
   grunt.registerTask "prod", [
+    "bower:prod"
     "compileAssets"
     "concat"
     "uglify"

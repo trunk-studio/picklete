@@ -92,13 +92,13 @@
   });
 
   // front end hack
-  var _visualDiscountNumber = function () {
-    var disCountNode = $('input[name=discount]');
-    if (disCountNode.val() == undefined || disCountNode.val() === 0)
-      return;
-
-    disCountNode.val(disCountNode.val() * 100);
-  };
-  _visualDiscountNumber();
+  // var _visualDiscountNumber = function () {
+  //   var disCountNode = $('input[name=discount]');
+  //   if (disCountNode.val() == undefined || disCountNode.val() === 0)
+  //     return;
+  //
+  //   disCountNode.val(disCountNode.val() * 100);
+  // };
+  // _visualDiscountNumber();
 
 }(jQuery));

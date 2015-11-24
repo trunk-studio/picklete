@@ -1,4 +1,8 @@
 extends ../_layout_head
+block head
+  meta(property="og:title" content="#{company.title}")
+  //- meta(property="og:description" content="#{productGm.Brand.desc}")
+  //- meta(property="og:image" content="#{coverPhotos[0]}")
 
 block body
   - var flash = req.flash('info');

@@ -80,11 +80,8 @@ let PromotionController = {
       }
       // additionalPurchase.name = findProduct.name;
       if(data.discount != '') {
-        var count = data.discount.toString().length;
-        var discount = (count > 1) ? parseInt(data.discount, 10) / 100 : parseInt(data.discount, 10) / 10;
-        additionalPurchase.discount = discount;
-        console.log('---------------- discount');
-        console.log(discount);
+        if(data.discount>10) data.discount*=0.1;
+        additionalPurchase.discount = data.discount;
       }
 
       if(data.reducePrice!='')
@@ -140,7 +137,7 @@ let PromotionController = {
       let limit = await pagination.limit(req);
       let page = await pagination.page(req);
       let offset = await pagination.offset(req);
-      
+
       let brands = await db.Brand.findAll();
 
       if(query.keyword)

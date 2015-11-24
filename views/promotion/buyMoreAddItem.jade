@@ -111,9 +111,12 @@ block body
               td= product.price
             td
               if query.type == 'reduce'
-                span.text-danger #{query.reducePrice}
+                span.text-danger #{product.price - query.reducePrice}
               else
-                span.text-danger #{Math.ceil(product.price * query.discount)}
+                if query.discount >10
+                  span.text-danger #{Math.ceil(product.price * query.discount * 0.01)}
+                else
+                  span.text-danger #{Math.ceil(product.price * query.discount * 0.1)}
                 
   hr.dashed-line
   +pagination-simple-pager(page, totalPages, limit)

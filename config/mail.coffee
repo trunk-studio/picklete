@@ -15,8 +15,9 @@ module.exports.mail = {
       html: """<html><body>
       <br />親愛的%(storeName2)s顧客您好!
       <br />
-      <br />誠摯感謝您選購%(storeName3)s平台精心揀選的優質商品!
-      <br />網站成立的宗旨是希望能與更多懂生活的人一同分享及找回生活中的理想樂園，
+      <br />誠摯感謝您選購%(storeName3)s平台提供的優質農產品!
+      <br />網站成立的宗旨是希望能提供給更多注重安全食品、健康生活的人，
+      <br />一同分享與找回食物最初的美味，
       <br />%(storeName3)s團隊在此預祝您擁有愉悅且舒適的每一天!
       <br />
       <br />以下為您於%(orderTime)s的訂購記錄，
@@ -26,19 +27,21 @@ module.exports.mail = {
       <br />訂單編號：%(orderSerialNumber)s
       <br />付款方式：
       <br />%(paymentMethod)s
-      <br />付款方式備注：為避免取消訂單，請於%(deadLine)s前繳款完畢
+      <br />付款方式備注：為避免取消訂單，%(deadLine)s
+      <br />
       <br />
       <br />訂購項目：
       <br />%(productName)s
       <br />
       <br />預計出貨日：
       <br />%(deliveryDate)s
+      <br />柳丁週一出貨，柳丁汁週一、週三出貨
       <br />
       <br />為了保障您的資料安全，請登入會員中心查詢90天內所有訂單詳細資訊。
       <br />祝您購物愉快
       <br />此為系統信件，請勿直接回覆此信件
       <br />---
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />客服信箱：%(serviceMail)s
       <br />上班時間：週一至週五，10.00AM - 5.00PM，比照國定休假日
       </body></html>"""
@@ -62,9 +65,9 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />i+DEAL創而有意 | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
-      <br />客服信箱：service@wevo.com.tw
+      <br />客服信箱：%(serviceMail)s
       <br />上班時間：週一至週五，10.00AM - 5.00PM，比照國定休假日
       <br />
       </body></html>"""
@@ -77,7 +80,10 @@ module.exports.mail = {
 
       您於%(storeName3)s平台消費%(paymentTotalAmount)s元，已使用(信用卡/ATM/超商繳款)完成付款。
 
-      訂單編號：%(orderSerialNumber)s ，我們將於確認定單後盡快為您出貨，謝謝您的惠顧。
+      訂單編號：%(orderSerialNumber)s
+
+      預計出貨日：%(deliveryDate)s，我們將於確認定單後盡快為您出貨，謝謝您的惠顧。
+      柳丁週一出貨，柳丁汁週一、週三出貨
 
       為了保障您的資料安全，請登入會員中心查詢90天內所有訂單詳細資訊。
 
@@ -85,7 +91,7 @@ module.exports.mail = {
 
       ---
 
-      %(storeName)s | 好物慢慢選
+      %(storeName)s | 雲端農場
 
       客服信箱：%(serviceMail)s
 
@@ -107,7 +113,7 @@ module.exports.mail = {
 
       ---
 
-      %(storeName)s | 好物慢慢選
+      %(storeName)s | 雲端農場
 
       客服信箱：%(serviceMail)s
 
@@ -146,7 +152,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -168,7 +174,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -191,7 +197,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -216,7 +222,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -230,8 +236,9 @@ module.exports.mail = {
       html: """<html><body>
       <br />親愛的 %(fullName)s 您好：
       <br />
-      <br />誠摯感謝您註冊%(storeName3)s平台精心揀選的優質商品!
-      <br />網站成立的宗旨是希望能與更多懂生活的人一同分享及找回生活中的理想樂園，
+      <br />誠摯感謝您註冊%(storeName3)s，平台提供農民精心栽種的優質農產品!
+      <br />網站成立的宗旨是希望能提供給更多注重安全食品、健康生活的人，
+      <br />一同分享與找回食物最初的美味，
       <br />%(storeName3)s團隊在此預祝您擁有愉悅且舒適的每一天!
       <br />
       <br />感謝您註冊我們的服務，請點選以下連結開通帳號
@@ -246,7 +253,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -269,7 +276,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />
@@ -294,7 +301,7 @@ module.exports.mail = {
       <br />
       <br />---
       <br />
-      <br />%(storeName)s | 好物慢慢選
+      <br />%(storeName)s | 雲端農場
       <br />
       <br />客服信箱：%(serviceMail)s
       <br />

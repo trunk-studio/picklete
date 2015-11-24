@@ -193,7 +193,7 @@ module.exports = (grunt) ->
       options:
         startTag: "// STYLES"
         endTag: "// STYLES END"
-        fileTmpl: "link(rel=\"stylesheet\", href=\"/%s\")"
+        fileTmpl: "link(rel=\"stylesheet\", href=\"%s\")"
         appRoot: ".tmp/public"
 
       files:

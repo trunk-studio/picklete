@@ -76,7 +76,7 @@
       buymore += item.price;
     });
   }
-  buymoreDiv.text(buymore);
+  buymoreDiv.text(Math.ceil(buymore));
 
   picklete_cart.orderItems.forEach(function(orderItem, index){
     subtotal += parseInt(orderItem.price*orderItem.quantity, 10);

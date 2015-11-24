@@ -7,14 +7,26 @@ module.exports = {
   cookieVersion:'0.1'
   shipment: 'agricloud'
   freeShippingInformation:'*購買兩件以上享有免運費優惠！'
+  mailRemarks:'麻煩請於出貨前三天前匯款，未在時間匯款，出貨時間將移至下週出貨(每筆訂單有7天匯款時間，逾時系統會取消訂單)，造成不便請多見諒。'
   deliveryTime:[
-    "2015-11-16","2015-11-18",
-    "2015-11-23","2015-11-25",
-    "2015-11-30","2015-12-02",
-    "2015-12-07","2015-12-09",
-    "2015-12-14","2015-12-16",
-    "2015-12-21","2015-12-23",
-    "2015-12-28","2015-12-30"
+    "",
+    "2015-11-18",
+    "2015-11-25",
+    "2015-12-02",
+    "2015-12-09",
+    "2015-12-16",
+    "2015-12-23",
+    "2015-12-30"
+  ]
+  deliveryTimeShow:[
+    "",
+    "2015-11-16 ~ 2015-11-18",
+    "2015-11-23 ~ 2015-11-25",
+    "2015-11-30 ~ 2015-12-02",
+    "2015-12-07 ~ 2015-12-09",
+    "2015-12-14 ~ 2015-12-16",
+    "2015-12-21 ~ 2015-12-23",
+    "2015-12-28 ~ 2015-12-30"
   ]
   # mail: {
   #   type: 'ses'
@@ -105,7 +117,7 @@ module.exports = {
       options:{
         clientID: '1598226980388780'
         clientSecret: '71ae89eba342ce5a48a30a870d6bd473'
-        scope: [ 'email', 'public_profile' ]
+        profileFields: [ 'id', 'email', 'gender', 'link', 'locale', 'name', 'timezone', 'updated_time', 'verified', 'displayName' ]
         callbackURL: "http://localhost:1337/auth/facebook/callback"
       }
     }

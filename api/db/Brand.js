@@ -39,7 +39,11 @@ module.exports = function(sequelize, DataTypes) {
     // 順序權重
     weight: {
       type: DataTypes.INTEGER,
+    },
+    link: {
+      type: DataTypes.STRING,
     }
+
   });
 
   return Brand;

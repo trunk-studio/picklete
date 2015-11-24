@@ -5,9 +5,18 @@ html
     | &#x9;
     title #{company.title} - #{company.name}
     // Mobile device set
-    meta(name='viewport', content='width=device-width, initial-scale=1.0', data-gatracking-id="#{locals.gaTrackingID}")
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no', data-gatracking-id="#{locals.gaTrackingID}")
+    // Open Graph
+    meta(property="fb:app_id" content="914100978637850")
+    meta(property="og:type" content="shop")
+    meta(property="og:locale" content="zh_TW")
+    meta(property="og:site_name" content="#{company.name}")
+    meta(property="og:title" content="#{company.title}")
+    meta(property="og:url" content="#{sails.config.domain}#{req.originalUrl}")
+    
+    block head
     // Fav and touch icons
-    link(rel='shortcut icon', href='#{company.avatar}')
+    link(rel='shortcut icon', href='/images/ico/favicon.ico', type='image/x-icon')
     // Style
     link(href='/stylesheets/bootstrap.css', media='screen', rel='stylesheet', type='text/css')
     | &#x9;
@@ -39,6 +48,15 @@ html
             span.icon-bar
             |         
             span.icon-bar
+          a.dropdown-toggle.navbar-toggle.navbar-icon(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+            span.glyphicon.glyphicon-shopping-cart.m-right-1.font-size-slarge
+            span.text-green 
+              span.order-items-count 0
+          //
+            dropdown-cart
+            ==================================================
+          ul.dropdown-menu.dropdown-menu-right.dropdown-cart.mobilde-car
+            .dropdown-cart-content#dropdown-cart-content
           |       
           a.navbar-brand(href='/') #{company.name}
         // /navbar-header
@@ -57,7 +75,7 @@ html
                     dropdown-menu-brands
                     ==================================================
                   .clearfix.m-bottom-2.text-left
-                    h4.text-gray-darker.m-bottom-4 代理品牌
+                    h4.text-gray-darker.m-bottom-4 #{i18n('agent-brand')}
                     |   
                     ul.list-inline.list-brand
                       each brand, idx in brands
@@ -81,12 +99,7 @@ html
                   // /clearfix
                 // /container
               // /dropdown-menu
-            |         
-            li
-              a.menu-blog.width-10.text-center(href='#{company.blog}')
-                span.text-en BLOG
-                |             
-                span.text-active 生活誌
+
             |   
             li
               a.menu-shop.width-10.text-center(href='/shop/products')
@@ -130,7 +143,7 @@ html
                 a.menu-cart.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
                   span.glyphicon.glyphicon-shopping-cart.m-right-1.font-size-slarge
                   span.text-green 
-                    span#order-items-count 0
+                    span.order-items-count 0
                 //
                   dropdown-cart
                   ==================================================
@@ -200,13 +213,18 @@ html
             a(href='/member/favorite')
               span.glyphicon.glyphicon-user.m-right-1
               | MEMBER
-
         |     
         li
           a(href='/user/cart')
             span.glyphicon.glyphicon-shopping-cart.m-right-1
-            span.text-green
-              span#order-items-count
+            | CART
+
+        - if (user) 
+          li
+              a(href='/logout')
+                span.glyphicon.glyphicon-user.m-right-1
+                | LOGOUT
+
         |     
         li
           .input-group.m-bottom-2.m-top-2
@@ -251,7 +269,6 @@ html
         // /navbar-collapse
       // /container
     // /navbar-fixed-top
-
     - var flash = errors || req.flash('message') || req.flash('error')
     if flash.length != 0
       .row.col-xs-12
@@ -264,37 +281,39 @@ html
 
     include _layout_footer
 
-  script(src='/javascripts/plugin/modernizr.custom.js')
-  script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
-  script(src='http://code.jquery.com/jquery-1.9.1.js')
-  script(src='/javascripts/plugin/scrolltotop.js')
-  // /scrolltotop
-  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
-  script(src='/javascripts/plugin/bootstrap.js')
-  // /bootstrap
-  script(src='/javascripts/plugin/jasny-bootstrap.js')
-  // /jasny-bootstrap
-  script(src='/javascripts/plugin/classie.js')
-  script(src='/javascripts/plugin/uisearch.js')
-  // /sb-search
-  script(src='/javascripts/plugin/input-number.js')
-  // /input-number
-  script(src='/javascripts/plugin/tagsinput.js')
-  script(src='/javascripts/plugin/cbpAnimatedHeader.js')
-  // /cbpAnimatedHeader
-  script(type='text/javascript', src='/javascripts/plugin/notifyme.js')
-  script(src='/javascripts/plugin/scrolltotop.js')
-  script(src='/javascripts/plugin/cbpScroller.js')
-  script(src="/bower/js-cookie/js.cookie.js")
-  script(type='text/javascript' src='/javascripts/common/head_layout.js')
-  script(type='text/javascript' src='/javascripts/user/login.js')
-  script(type='text/javascript' src='/bower/js-cookie/js.cookie.js')
-  script(type='text/javascript' src='/bower/jquery.serializeJSON/jquery.serializejson.js')
-  script(src="/javascripts/common/number.js")
-  script(src="/javascripts/main/shop.js")
-  script.
-    window.USER = !{JSON.stringify(user)};
+    script(src='https://code.jquery.com/jquery-1.11.3.min.js')
+    script(src='/javascripts/plugin/modernizr.custom.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js')
+    //- script(src='http://code.jquery.com/jquery-1.9.1.js')
+    //- script(src='/javascripts/plugin/jquery.mobile.min.js')
+    script(src='/javascripts/plugin/scrolltotop.js')
+    // /scrolltotop
+    //- script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    script(src='/javascripts/plugin/bootstrap.js')
+    script(type='text/javascript' src='/bower/js-cookie/js.cookie.js')
+    // /bootstrap
+    script(src='/javascripts/plugin/jasny-bootstrap.js')
+    // /jasny-bootstrap
+    script(src='/javascripts/plugin/classie.js')
+    script(src='/javascripts/plugin/uisearch.js')
+    // /sb-search
+    script(src='/javascripts/plugin/input-number.js')
+    // /input-number
+    script(src='/javascripts/plugin/tagsinput.js')
+    script(src='/javascripts/plugin/cbpAnimatedHeader.js')
+    // /cbpAnimatedHeader
+    script(type='text/javascript', src='/javascripts/plugin/notifyme.js')
+    script(src='/javascripts/plugin/scrolltotop.js')
+    script(src='/javascripts/plugin/cbpScroller.js')
+    script(type='text/javascript' src='/javascripts/common/head_layout.js')
+    script(type='text/javascript' src='/javascripts/user/login.js')
+    
+    script(type='text/javascript' src='/bower/jquery.serializeJSON/jquery.serializejson.js')
+    script(src="/javascripts/common/number.js")
+    script(src="/javascripts/main/shop.js")
+    script.
+      window.USER = !{JSON.stringify(user)};
 
-  block js
-    //- //ＢＵＧ 放shop裡不行
-    //- script(src="/javascripts/main/shop.js")
+    block js
+      //- //ＢＵＧ 放shop裡不行
+      //- script(src="/javascripts/main/shop.js")
