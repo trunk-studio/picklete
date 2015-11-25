@@ -7,24 +7,14 @@ module.exports = {
       let flashPromotions = await PromotionService.getCurrentFlashPackage();
 
       let about = await db.About.findOne();
-      var productPhotos, dealerPhotos;
 
-      try {
-         productPhotos = JSON.parse(about.dataValues.productPhotos);
-         dealerPhotos = JSON.parse(about.dataValues.dealerPhotos);
-      } catch (e) {
-          console.log(e);
-      }
-
-      console.log("abou==>",about);
+      console.log("about==>",about);
       res.view("main/index", {
         selectionActivities,
         topicActivities,
         sliders,
         flashPromotions,
-        aboutCompany:about.aboutCompany,
-        dealerPhotos,
-        productPhotos
+        about
       });
 
     } catch (e) {
