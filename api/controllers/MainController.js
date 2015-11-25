@@ -5,11 +5,22 @@ module.exports = {
       let sliders = await db.Slider.findAll();
       let topicActivities = await TopicActiveService.getModel();
       let flashPromotions = await PromotionService.getCurrentFlashPackage();
+
+
+      let about = await db.About.findOne();
+      var productPhotos = JSON.parse(about.dataValues.productPhotos);
+      var dealerPhotos = JSON.parse(about.dataValues.dealerPhotos);
+      var dealerNames = JSON.parse(about.dataValues.dealerNames);
+
+      console.log("abou==>",about);
       res.view("main/index", {
         selectionActivities,
         topicActivities,
         sliders,
-        flashPromotions
+        flashPromotions,
+        aboutCompany:about.aboutCompany,
+        dealerPhotos,
+        dealerNames
       });
 
     } catch (e) {
