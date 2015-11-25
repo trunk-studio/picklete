@@ -1,8 +1,10 @@
 extends ../_layout_head
 block head
   meta(property="og:title" content="#{company.title}")
-  //- meta(property="og:description" content="#{productGm.Brand.desc}")
-  //- meta(property="og:image" content="#{coverPhotos[0]}")
+  - var desc = about !== null ?  about.aboutCompany : "雲端農場"
+  meta(property="og:description" content=desc)
+  each promo in flashPromotions
+    meta(property="og:image" content="#{promo.coverPhoto[0]}")
 
 block body
   - var flash = req.flash('info');
@@ -18,7 +20,7 @@ block body
       - for(var i=0; i< slideLength; i++)
         - var classActiveSlide = (i == 0) ? 'active' : '';
         li(data-target='#carousel-index', data-slide-to='#{i}', class=classActiveSlide)
-        | &#x9;&#x9;
+        | 
       //- // /carousel-indicators
 
     .carousel-inner(role='listbox')
@@ -34,12 +36,12 @@ block body
     // /carousel-inner
     a.left.carousel-control(href='#carousel-index', role='button', data-slide='prev')
       span.glyphicon.glyphicon-chevron-thin-left(aria-hidden='true')
-      | &#x9;&#x9;
+      | 
       span.sr-only Previous
     // /carousel-control
     a.right.carousel-control(href='#carousel-index', role='button', data-slide='next')
       span.glyphicon.glyphicon-chevron-thin-right(aria-hidden='true')
-      | &#x9;&#x9;
+      | 
       span.sr-only Next
     // /carousel-control
   // /carousel-index
@@ -51,7 +53,7 @@ block body
         | #{i18n('selection-active')}
     // /page-header
     hr.hr-6.m-bottom-6
-    | &#x9;
+    | 
     each activity in selectionActivities
       .row.row-s
         each image in activity.Images
@@ -95,7 +97,7 @@ block body
         .col-md-4.col-sm-6
           a.item-block.m-bottom-6(href='/shop/list?flash=#{promo.id}')
             img.img-full(src='#{promo.coverPhoto[0]}')
-            | &#x9;&#x9;&#x9;&#x9;
+            | 
             .info-block
               .row.row-s
                 .col-xs-8
@@ -136,7 +138,7 @@ block body
     //-       h6.text-muted.m-bottom-4
     //-         span.glyphicon.glyphicon-clock.m-right-1
     //-         | 18 &#x516D;&#x6708;, 2015
-    //-         | &#x9;
+    //-         | 
     //-         a(href='#')
     //-           span.glyphicon.glyphicon-folder.m-right-1.m-left-2
     //-           | +&#x8A2D;&#x8A08;
@@ -159,7 +161,7 @@ block body
     //-       h6.text-muted.m-bottom-4
     //-         span.glyphicon.glyphicon-clock.m-right-1
     //-         | 18 &#x516D;&#x6708;, 2015
-    //-         | &#x9;
+    //-         | 
     //-         a(href='#')
     //-           span.glyphicon.glyphicon-folder.m-right-1.m-left-2
     //-           | +&#x8A2D;&#x8A08;
@@ -182,7 +184,7 @@ block body
     //-       h6.text-muted.m-bottom-4
     //-         span.glyphicon.glyphicon-clock.m-right-1
     //-         | 18 &#x516D;&#x6708;, 2015
-    //-         | &#x9;
+    //-         | 
     //-         a(href='#')
     //-           span.glyphicon.glyphicon-folder.m-right-1.m-left-2
     //-           | +&#x8A2D;&#x8A08;
@@ -198,7 +200,7 @@ block body
     // /row THEME OF THE MONTH
     - if (topicActivities && topicActivities[0])
       hr.hr-6.m-bottom-6
-      | &#x9;
+      | 
       .page-header.text-center.text-uppercase
         h3
           | theme of the month

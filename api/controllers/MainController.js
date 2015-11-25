@@ -5,11 +5,16 @@ module.exports = {
       let sliders = await db.Slider.findAll();
       let topicActivities = await TopicActiveService.getModel();
       let flashPromotions = await PromotionService.getCurrentFlashPackage();
+
+      let about = await db.About.findOne();
+
+      console.log("about==>",about);
       res.view("main/index", {
         selectionActivities,
         topicActivities,
         sliders,
-        flashPromotions
+        flashPromotions,
+        about
       });
 
     } catch (e) {

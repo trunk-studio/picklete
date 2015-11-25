@@ -2,6 +2,8 @@ extends ../_layout_head
 include ../mixins/pagination
 block head
   meta(property="og:title" content="#{company.title}")
+  - var desc = i18n("brand-list")
+  meta(property="og:description" content=desc)
 
 block body
     .mobile-hide
