@@ -2,7 +2,13 @@ include ../mixins/_product
 extends ../_layout_head
 block head
   meta(property="og:title" content="#{productGm.name}")
-  meta(property="og:description" content="#{productGm.Brand.desc} - #{product.ProductGm.explain}")
+  if (product.comment)
+    meta(property="og:description" content="#{product.comment}")
+  else
+    - var desc = productGm.Brand.desc.replace(/\n/g, '<br>')
+    if (desc.length > 200)
+    desc = desc.substring(0,199)
+    meta(property="og:description" content=desc)
   meta(property="og:image" content="#{coverPhotos[0]}")
 
 block body
