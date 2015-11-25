@@ -1,9 +1,9 @@
 extends ../_layout_head
 block head
   meta(property="og:title" content="#{company.title}")
-  - var desc = about !== undefined ?  about.aboutCompany : "About Us"
-  - var imageA = about !== undefined ? about.dealerPhotos[0] : ""
-  - var imageB = about !== undefined ? about.dealerPhotos[1] : ""
+  - var desc = about !== null ?  about.aboutCompany : "About Us"
+  - var imageA = about !== null ? about.dealerPhotos[0] : ""
+  - var imageB = about !== null ? about.dealerPhotos[1] : ""
   meta(property="og:description" content=desc)
   meta(property="og:image" content=imageA)
   meta(property="og:image" content=imageB)
