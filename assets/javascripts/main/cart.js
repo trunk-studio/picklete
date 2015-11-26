@@ -24,6 +24,7 @@
   var packingFee = 0;
   var packingFeeBasic = 60;
   var packingQuantity = 0;
+  var lastTotalPrice = 0;
 
   /* ======================================== */
 
@@ -61,7 +62,7 @@
     }
 
     packingFee = packingFeeBasic * packingQuantity;
-
+    lastTotalPrice = totalPrice - shippingFee;
     totalPrice = tmpPrice + shippingFee + packingFee;
     console.log('=== calcTatalPrice ===', totalPrice);
     Cookies.set('calcTatalPrice', totalPrice);
@@ -203,6 +204,7 @@
       subtotalDiv.text(subtotal.formatMoney());
       subtotalDiv.data('value', subtotal);
 
+      lastTotalPrice = totalPrice - shippingFee;
       totalPrice = subtotal + buymore;
       totalPriceDiv.text(totalPrice.formatMoney());
       totalPriceDiv.data('value', totalPrice);
@@ -374,6 +376,13 @@
   $(".productQuantities").delegate("input", "change", function(){
     // calculate price and save cookie before do anything.
     reCalSubtotalPriceAndSaveCookie();
+
+    var additionalPurchaseLimitreachAfterChangeItem = (totalPrice - shippingFee >= 1500 && lastTotalPrice <= 1500);
+    var additionalPurchaseLimitUnreachAfterChangeItem =(totalPrice - shippingFee <= 1500 && lastTotalPrice >= 1500)
+
+    if(additionalPurchaseLimitreachAfterChangeItem || additionalPurchaseLimitUnreachAfterChangeItem)
+      window.location.reload();
+
     calcTatalPrice();
 
     // get target prudoct quantity value and its field id.
@@ -400,6 +409,7 @@
       targetSelect.append('<option value="'+i+'">'+i+'</option>');
       console.log('=== packingSelect ==>',targetSelect.val());
     };
+
   });
   // end
 
