@@ -377,9 +377,9 @@
     // calculate price and save cookie before do anything.
     reCalSubtotalPriceAndSaveCookie();
 
-    if(totalPrice - shippingFee > 1500 && lastTotalPrice < 1500)
+    if(totalPrice - shippingFee >= 1500 && lastTotalPrice <= 1500)
       window.location.reload();
-    if(totalPrice - shippingFee < 1500 && lastTotalPrice > 1500)
+    if(totalPrice - shippingFee <= 1500 && lastTotalPrice >= 1500)
       window.location.reload();
     calcTatalPrice();
 
