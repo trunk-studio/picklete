@@ -377,10 +377,12 @@
     // calculate price and save cookie before do anything.
     reCalSubtotalPriceAndSaveCookie();
 
-    if(totalPrice - shippingFee >= 1500 && lastTotalPrice <= 1500)
+    let whatSituaction = (totalPrice - shippingFee >= 1500 && lastTotalPrice <= 1500) ||
+                         (totalPrice - shippingFee <= 1500 && lastTotalPrice >= 1500)
+
+    if(whatSituaction)
       window.location.reload();
-    if(totalPrice - shippingFee <= 1500 && lastTotalPrice >= 1500)
-      window.location.reload();
+
     calcTatalPrice();
 
     // get target prudoct quantity value and its field id.
