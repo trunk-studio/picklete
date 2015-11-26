@@ -377,10 +377,10 @@
     // calculate price and save cookie before do anything.
     reCalSubtotalPriceAndSaveCookie();
 
-    let reloadAdditionalPurchase = (totalPrice - shippingFee >= 1500 && lastTotalPrice <= 1500) ||
-                                   (totalPrice - shippingFee <= 1500 && lastTotalPrice >= 1500)
+    var additionalPurchaseLimitreachAfterChangeItem = (totalPrice - shippingFee >= 1500 && lastTotalPrice <= 1500);
+    var additionalPurchaseLimitUnreachAfterChangeItem =(totalPrice - shippingFee <= 1500 && lastTotalPrice >= 1500)
 
-    if(reloadAdditionalPurchase)
+    if(additionalPurchaseLimitreachAfterChangeItem || additionalPurchaseLimitUnreachAfterChangeItem)
       window.location.reload();
 
     calcTatalPrice();
