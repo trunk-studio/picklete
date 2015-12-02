@@ -84,8 +84,7 @@ block body
                       select#deliveryTimeType.form-control
                         option(value='0') #{i18n('select')}
                         each time in deliveryTime
-                          -if(sails.moment(time.deliveryTime).valueOf() > sails.moment().valueOf() && time != 'undefined')
-                            option(value= time.id) #{time.deliveryTimeShow}
+                          option(value= time.id) #{time.deliveryTimeShow}
                 .col-sm-4
                   .form-group
                     label
