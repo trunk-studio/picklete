@@ -186,13 +186,16 @@ let UserController = {
       let shippings = await ShippingService.findAll();
       // console.log('=== shippings ==>',shippings);
       let paymentMethod = sails.config.allpay.paymentMethod;
+      let deliveryTime = await db.DeliveryTime.findAll();
+
       return res.view('main/cart', {
         company,
         brands,
         additionalPurchaseProducts,
         slesctedAdditionalPurchases,
         shippings,
-        paymentMethod
+        paymentMethod,
+        deliveryTime
       });
     } catch (e) {
       sails.log.error(e.stack);

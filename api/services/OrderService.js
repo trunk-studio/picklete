@@ -370,8 +370,11 @@ var self = module.exports = {
       }
       shipment.address = `${shipment.zipcode} ${shipment.city}${shipment.region}${shipment.address}`;
       shipment.shippingFee = shippingFee;
-      if(thisOrder.deliveryTimeType != 0)
-        shipment.deliveryTimeType = sails.config.deliveryTime[thisOrder.deliveryTimeType];
+      if(thisOrder.deliveryTimeType != 0){
+        let time =  await db.DeliveryTime.findById(thisOrder.deliveryTimeType);
+        time = time.deliveryTime
+        shipment.deliveryTimeType = time;
+      }
 
       let isolationLevel = db.Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE;
       let transaction = await db.sequelize.transaction({isolationLevel});

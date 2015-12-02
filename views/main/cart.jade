@@ -75,20 +75,17 @@ block body
                     //-   option 宅配 / 郵局
                   // /form-group
                 // /col-sm-4
-                -if(sails.config.deliveryTime)
+                -if(deliveryTime)
                   .col-sm-4
                     .form-group
                       label
                         | 出貨日期
                         span.text-danger *
                       select#deliveryTimeType.form-control
-                        -console.log(sails.config.deliveryTime)
                         option(value='0') #{i18n('select')}
-                        -var index = 0;
-                        each time in sails.config.deliveryTime
-                          -if(sails.moment(time).valueOf() > sails.moment().valueOf() && time != 'undefined')
-                            option(value= index) #{sails.config.deliveryTimeShow[index]}
-                          - index ++ 
+                        each time in deliveryTime
+                          -if(sails.moment(time.deliveryTime).valueOf() > sails.moment().valueOf() && time != 'undefined')
+                            option(value= time.id) #{time.deliveryTimeShow}
                 .col-sm-4
                   .form-group
                     label
