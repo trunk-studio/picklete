@@ -282,4 +282,33 @@ module.exports.createTestData = async () => {
   await createdSelectionActive[2].setImages([createdImages[2], createdImages[3]]);
   await createdSelectionActive[3].setImages([createdImages[4], createdImages[5], createdImages[6]]);
 
+
+  let deliveryTime = [
+    {
+      "deliveryTime": '2015-11-18',
+      "deliveryTimeShow": '2015-11-16 ~ 2015-11-18'
+    },
+    {
+      "deliveryTime": '2015-11-25',
+      "deliveryTimeShow": "2015-11-23 ~ 2015-11-25"
+    },{
+      "deliveryTime": "2015-12-02",
+      "deliveryTimeShow": "2015-11-30 ~ 2015-12-02",
+    },{
+      "deliveryTime": "2015-12-09",
+      "deliveryTimeShow": "2015-12-07 ~ 2015-12-09",
+    },{
+      "deliveryTime": "2015-12-16",
+      "deliveryTimeShow": "2015-12-14 ~ 2015-12-16"
+    },{
+      "deliveryTime": "2015-12-23",
+      "deliveryTimeShow": "2015-12-21 ~ 2015-12-23",
+    },{
+      "deliveryTime": "2015-12-30",
+      "deliveryTimeShow": "2015-12-28 ~ 2015-12-30"
+    }
+  ];
+
+  await db.DeliveryTime.bulkCreate(deliveryTime);
+
 }
