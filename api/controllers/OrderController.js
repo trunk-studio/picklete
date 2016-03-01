@@ -80,6 +80,8 @@ OrderController = {
         req.session.UserController_controlMembers_limit || 10
       ));
 
+      let ordersPaymentTotal = await db.Order.sum('paymentTotalAmount', {where: queryObj });
+
       queryObj = {
         where: queryObj,
         offset: page * limit,
@@ -103,7 +105,7 @@ OrderController = {
 
       let orders = await db.Order.findAndCountAll(queryObj);
 
-      return res.view({orders,query,page,limit});
+      return res.view({orders,query,page,limit,ordersPaymentTotal});
     } catch (error) {
       return res.serverError(error);
     }
