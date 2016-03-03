@@ -27,4 +27,23 @@ module.exports = {
     return res.ok(list);
   },
 
+  // reportData: async (req, res) => {
+  //
+  //   let rep
+  // },
+
+  ordersReportData: async (req, res) => {
+    let query = req.query;
+    let queryResult = await OrderService.query(query);
+    console.log('!!!!!!!!!!!!!!', JSON.stringify(queryResult.orders.rows,null,4));
+
+    let reportData = {
+      orders: queryResult.orders.rows,
+      ordersPaymentTotal: queryResult.ordersPaymentTotal
+    };
+    // console.log(JSON.stringify(reportData,null,4));
+
+    return res.ok(reportData);
+  }
+
 };

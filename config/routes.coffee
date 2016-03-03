@@ -501,6 +501,11 @@ module.exports.routes = {
      credentials: false
     }
   }
+
+  'post /api/report/orders' : {
+    controller: "ReportController",
+    action: "ordersReportData"
+  }
 }
 
 ###*
