@@ -44,7 +44,7 @@ module.exports.bootstrap = async (cb) => {
       hashKey: sails.config.allpay.hashKey,
       hashIV: sails.config.allpay.hashIV,
       debug: sails.config.allpay.debug,
-      prod: false,
+      prod: sails.config.environment === 'production',
       ReturnURL: sails.config.allpay.ReturnURL,
       ClientBackURL: sails.config.allpay.ClientBackURL,
       PaymentInfoURL: sails.config.allpay.PaymentInfoURL

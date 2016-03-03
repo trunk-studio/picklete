@@ -9,8 +9,8 @@ export default class Allpay {
     this.hashIV = hashIV;
     this.debug = debug;
     this.prod = prod;
-    this.AioCheckOut = prod ? 'https://payment.allpay.com.tw/Cashier/AioCheckOut' :
-    'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut'
+    this.AioCheckOut = debug ? 'https://payment-stage.allpay.com.tw/Cashier/AioCheckOut' :
+    'https://payment.allpay.com.tw/Cashier/AioCheckOut'
     this.ReturnURL = ReturnURL;
     this.ClientBackURL = ClientBackURL;
     this.PaymentInfoURL = PaymentInfoURL;
