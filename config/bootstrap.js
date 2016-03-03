@@ -47,7 +47,8 @@ module.exports.bootstrap = async (cb) => {
       prod: sails.config.environment === 'production',
       ReturnURL: sails.config.allpay.ReturnURL,
       ClientBackURL: sails.config.allpay.ClientBackURL,
-      PaymentInfoURL: sails.config.allpay.PaymentInfoURL
+      PaymentInfoURL: sails.config.allpay.PaymentInfoURL,
+      allpayModel: db.Allpay
     });
 
     let createInitData = true;

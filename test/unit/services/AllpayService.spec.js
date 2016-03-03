@@ -12,7 +12,8 @@ describe("about Allpay service", function() {
         prod: false,
         ReturnURL: sails.config.allpay.ReturnURL,
         ClientBackURL: sails.config.allpay.ClientBackURL,
-        PaymentInfoURL: sails.config.allpay.PaymentInfoURL
+        PaymentInfoURL: sails.config.allpay.PaymentInfoURL,
+        allpayModel: db.Allpay
     	});
       order = await db.Order.create({
   			"id": 1,

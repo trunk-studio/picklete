@@ -52,7 +52,9 @@ let allpay = new Allpay({
   // 建立訂單後 [返回廠商]的按鈕的 redirect 網址，不需包含 domain
   ClientBackURL: /shop/done,
   // 訂單建立完成後 restful api，不需包含 domain
-  PaymentInfoURL: /allpay/paymentinfo
+  PaymentInfoURL: /allpay/paymentinfo,
+  // 傳入 allpay 的 sequelize model 
+  allpayModel: db.Allpay
 });
 ```
 

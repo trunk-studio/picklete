@@ -1,9 +1,10 @@
 import util from 'util';
 import crypto from 'crypto';
 import _ from 'lodash';
+import Sequelize from 'sequelize';
 
 export default class Allpay {
-  constructor ({merchantID, hashKey, hashIV, prod = false, debug = true, ReturnURL, ClientBackURL, PaymentInfoURL}) {
+  constructor ({allpayModel ,merchantID, hashKey, hashIV, prod = false, debug = true, ReturnURL, ClientBackURL, PaymentInfoURL}) {
     this.merchantID = merchantID;
     this.hashKey = hashKey;
     this.hashIV = hashIV;
@@ -14,6 +15,7 @@ export default class Allpay {
     this.ReturnURL = ReturnURL;
     this.ClientBackURL = ClientBackURL;
     this.PaymentInfoURL = PaymentInfoURL;
+    this.Allpay = allpayModel;
   }
 
   genCheckMacValue(data) {
@@ -61,7 +63,7 @@ export default class Allpay {
   		ClientBackURL: this.resolve(domain, this.ClientBackURL, true) + '?t=' + MerchantTradeNo,
   		PaymentInfoURL: this.resolve(domain, this.PaymentInfoURL, true)
   	};
-    let allpay = await db.Allpay.create({
+    let allpay = await this.Allpay.create({
       OrderId: orderId,
       MerchantTradeNo: data.MerchantTradeNo,
       PaymentType: data.PaymentType
@@ -123,7 +125,7 @@ export default class Allpay {
           throw new Error(`CheckMacError!!`);
         }
       }
-      let findAllpayInfo = await db.Allpay.findOne({
+      let findAllpayInfo = await this.Allpay.findOne({
         where:{
           MerchantTradeNo: callBackData.MerchantTradeNo
         }
