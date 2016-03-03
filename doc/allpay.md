@@ -2,38 +2,39 @@
 ## 前置
 1. sequelize
 2. Mysql 準備一個 Allpay table [可參考](https://github.com/FuYaoDe/picklete/blob/agricloud_develop/api/db/Allpay.coffee)
-   ```
-   CREATE TABLE `Allpays` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `TradeNo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `MerchantTradeNo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `RtnCode` int(11) DEFAULT NULL,
- `RtnMsg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `PaymentDate` datetime DEFAULT NULL,
- `TradeDate` datetime DEFAULT NULL,
- `PaymentType` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `shouldTradeAmt` float DEFAULT NULL,
- `TradeAmt` float DEFAULT NULL,
- `BankCode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `vAccount` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `ExpireDate` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `PaymentNo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `Barcode1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `Barcode2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `Barcode3` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `CheckMacValue` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
- `MerchantTradeDate` datetime DEFAULT NULL,
- `createdAt` datetime NOT NULL,
- `updatedAt` datetime NOT NULL,
- `OrderId` int(11) DEFAULT NULL,
- PRIMARY KEY (`id`),
- UNIQUE KEY `TradeNo` (`TradeNo`),
- UNIQUE KEY `MerchantTradeNo` (`MerchantTradeNo`),
- KEY `OrderId` (`OrderId`),
- CONSTRAINT `allpays_ibfk_1` FOREIGN KEY (`OrderId`) REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-   ```
-   以上為例 Allpay 跟 Order 建立關聯
+
+```
+  CREATE TABLE `Allpays` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `TradeNo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `MerchantTradeNo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `RtnCode` int(11) DEFAULT NULL,
+  `RtnMsg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PaymentDate` datetime DEFAULT NULL,
+  `TradeDate` datetime DEFAULT NULL,
+  `PaymentType` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `shouldTradeAmt` float DEFAULT NULL,
+  `TradeAmt` float DEFAULT NULL,
+  `BankCode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vAccount` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ExpireDate` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `PaymentNo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Barcode1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Barcode2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Barcode3` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `CheckMacValue` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `MerchantTradeDate` datetime DEFAULT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  `OrderId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `TradeNo` (`TradeNo`),
+  UNIQUE KEY `MerchantTradeNo` (`MerchantTradeNo`),
+  KEY `OrderId` (`OrderId`),
+  CONSTRAINT `allpays_ibfk_1` FOREIGN KEY (`OrderId`) REFERENCES `Orders` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+   Allpay 跟 Order 建立關聯
 
 ## 使用
 ```
@@ -129,16 +130,16 @@ return res.ok('1|OK');
 
 ## ATM 測試付款
 1. 左方選單  一般訂單查詢 > 全方位金流訂單
-2. 廠商訂單編號輸入 `getAllpayConfig` 傳入的 MerchantTradeNo
+2. 廠商訂單編號輸入剛剛創建訂單傳入的 MerchantTradeNo
 3. 將搜尋到訂單滑到最右邊有 `模擬付款` 的選項
 4. 如果付款成功會 alert `模擬付款成功！` ，失敗時會收到 alert `模擬付款訊息已送出 並未收到正確訊息"1|OK" 請檢查您的接收程式是否有誤`
 
 ## 信用卡測試付款
 1. 創建訂單時選擇信用卡付款
 2. 最後一步驟會要求輸入卡號，電話請輸入您的號碼，待會會收到驗證簡訊
-  ```
-  信用卡測試卡號: 4311-9522-2222-2222
-  信用卡測試安全碼: 222
-  信用卡測試有效年月: 大於測試時間
-  ```
+```
+信用卡測試卡號: 4311-9522-2222-2222
+信用卡測試安全碼: 222
+信用卡測試有效年月: 大於測試時間
+```
 3. 收到驗證簡訊輸入並確認，完成付款
