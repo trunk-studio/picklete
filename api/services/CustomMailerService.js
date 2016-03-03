@@ -30,7 +30,7 @@ module.exports = {
       return mailSendConfig;
 
     } catch (e) {
-      throw error;
+      throw e;
     }
 
   },
@@ -111,7 +111,7 @@ module.exports = {
       return {...mailSendConfig, syncLink, syncLinkHost, syncLinkParams};
 
     } catch (e) {
-      throw error;
+      throw e;
     }
 
   },
@@ -138,7 +138,7 @@ module.exports = {
 
       return mailSendConfig;
     } catch (e) {
-      throw error;
+      throw e;
     }
 
 
@@ -165,7 +165,7 @@ module.exports = {
       mailSendConfig.type = 'deliveryConfirm';
       return mailSendConfig;
     } catch (e) {
-      throw error;
+      throw e;
     }
 
   },
@@ -393,7 +393,7 @@ module.exports = {
       return mailSendConfig;
 
     } catch (e) {
-      throw error;
+      throw e;
     }
 
   }
