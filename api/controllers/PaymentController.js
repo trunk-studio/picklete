@@ -12,7 +12,14 @@ let PaymentController = {
       console.log('req',req.body);
       let data = req.body;
       let paid = await allpay.paid(data);
-      let order = await db.Order.findById(paid.OrderId);
+      let order = await db.Order.findOne({
+        where:{
+          id: paid.OrderId
+        },
+        include:{
+          model: db.User
+        }
+      });
       if(!order)
         throw new Error(`${paid} 嚴重錯誤!!付款後找不到訂單!!`);
 
@@ -40,8 +47,19 @@ let PaymentController = {
       let data = req.body;
       console.log("req",req.body);
       let paymentinfo = await allpay.paymentinfo(data);
-      let order = await db.Order.findById(paymentinfo.OrderId);
-
+      let order = await db.Order.findOne({
+        where:{
+          id:paymentinfo.OrderId
+        },
+        include:[{
+            model: db.User
+          },{
+            model: db.OrderItem
+          }, {
+            model: db.Shipment
+          }
+        ]
+      });
       if(!order)
         throw new Error(`${find} 找不到訂單!!`);
 
