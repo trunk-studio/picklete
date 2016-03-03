@@ -1,6 +1,6 @@
 extends ../_layout_head
 block head
-  meta(property="og:title" content="#{company.title}")
+  meta(property="og:title" content="#{company.title} - #{company.name}")
   - var desc = about !== null ?  about.aboutCompany : "雲端農場"
   meta(property="og:description" content=desc)
   each promo in flashPromotions

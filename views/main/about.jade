@@ -1,4 +1,13 @@
 extends ../_layout_head
+block head
+  meta(property="og:title" content="#{company.title} - 關於我們")
+  - var desc = about.brandVision
+  - if (desc.length > 200)
+  - desc = desc.substring(0,199)
+  meta(property="og:description" content=desc)
+  - if (productPhotos)
+    each productPhoto in productPhotos
+      meta(property="og:image" content=productPhoto)
 
 block body
 
