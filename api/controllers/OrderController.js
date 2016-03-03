@@ -15,61 +15,9 @@ OrderController = {
   },
   index: async (req, res) => {
     try {
-      console.log('query',req.query);
+      console.log('-------query----------',req.query);
+      console.log('================ ================ ================');
       let query = req.query;
-      let queryObj = {};
-      let queryShipmentObj = {};
-      let queryUserObj = {};
-
-      if(query.serialNumber)
-        queryObj.serialNumber = { 'like': '%'+query.serialNumber+'%'};
-      else
-        query.serialNumber =''
-
-      // if(query.keyword)
-      //   queryObj.keyword = { 'like': '%'+query.keyword+'%'};
-
-      if(query.userName) {
-        queryUserObj.username = { 'like': '%'+query.userName+'%'};
-      }else{
-        queryUserObj.username = { 'like': '%'};
-        query.username = ''
-      }
-      if(query.status != '0' && query.status )
-        queryObj.status = query.status;
-      else
-        query.status = 0;
-
-      // if(query.shipmentNotify != '0' && query.shipmentNotify)
-      //   queryObj.shipmentNotify = query.shipmentNotify;
-
-      if(query.shippingMethod != '0' && query.shippingMethod){
-        if(query.shippingMethod == 1){
-          queryShipmentObj.shippingType = { 'like': 'postoffice'};
-        }else if(query.shippingMethod == 2){
-          queryShipmentObj.shippingType = { 'like': 'delivery'};
-        }
-      }
-
-      if(query.addressee) {
-        queryShipmentObj.username = { 'like': '%'+query.addressee+'%'};
-      }else{
-        queryShipmentObj.username = { 'like': '%'};
-        query.username = ''
-      }
-
-      if(query.deliveryTimeTypeStart && query.deliveryTimeTypeEnd){
-        queryShipmentObj.deliveryTimeType = { between : [new Date(query.deliveryTimeTypeStart), new Date(query.deliveryTimeTypeEnd)]};
-      }else if(query.deliveryTimeTypeStart || query.deliveryTimeTypeEnd) {
-        queryShipmentObj.deliveryTimeType = query.deliveryTimeTypeStart? { gte : new Date(query.deliveryTimeTypeStart)}: { lte : new Date(query.deliveryTimeTypeEnd)};
-      }
-
-      if(query.createdStart && query.createdEnd) {
-         queryObj.createdAt = { between : [new Date(query.createdStart), new Date(query.createdEnd)]};
-      }else if(query.createdStart || query.createdEnd) {
-        queryObj.createdAt = query.createdStart? { gte : new Date(query.createdStart)}: { lte : new Date(query.createdEnd)};
-      }
-
       let page = req.session.UserController_controlMembers_page =
       parseInt(req.param('page',
         req.session.UserController_controlMembers_page || 0
@@ -80,32 +28,15 @@ OrderController = {
         req.session.UserController_controlMembers_limit || 10
       ));
 
-      let ordersPaymentTotal = await db.Order.sum('paymentTotalAmount', {where: queryObj });
+      let queryResult = await OrderService.query(query, page, limit);
 
-      queryObj = {
-        where: queryObj,
-        offset: page * limit,
-        limit: limit,
-        order: 'createdAt DESC',
-        include: [
-          {
-            model: db.User,
-            where:{
-              username: queryUserObj.username
-            }
-          }, {
-            model: db.Shipment,
-            where: queryShipmentObj
-          }, {
-            model: db.OrderItem
-          },
-          db.Invoice
-        ]
-      };
-
-      let orders = await db.Order.findAndCountAll(queryObj);
-
-      return res.view({orders,query,page,limit,ordersPaymentTotal});
+      return res.view({
+        orders: queryResult.orders,
+        ordersPaymentTotal: queryResult.ordersPaymentTotal,
+        query,
+        page,
+        limit
+      });
     } catch (error) {
       return res.serverError(error);
     }
