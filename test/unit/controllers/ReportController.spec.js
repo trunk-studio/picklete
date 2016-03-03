@@ -169,7 +169,7 @@ describe('about Report', () => {
     //   done();
     // });
 
-    it.only('Report export to Excel', (done) => {
+    it('Report export to Excel', (done) => {
       let data = {};
       request(sails.hooks.http.app).post('/api/report/orders').send(data).end((err, res) => {
         if (res.statusCode === 500) {
