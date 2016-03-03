@@ -8,8 +8,6 @@ module.exports = (sequelize, DataTypes) ->
     # 訂單編號，提供給平台使用
     serialNumber: DataTypes.STRING
     quantity: DataTypes.INTEGER
-    # 訂單成立後更新的編號，由 allpay 提供
-    merchantTradeNo: DataTypes.STRING
     # 結帳時系統自動算的金額
     paymentTotalAmount: DataTypes.FLOAT
     # 付款確認資訊
@@ -77,6 +75,7 @@ module.exports = (sequelize, DataTypes) ->
     Order.hasOne models.Shipment
     # invoice type, 二聯，三聯，以及發票格式會有不同
     Order.belongsTo models.Invoice
+    Order.hasOne models.Allpay
     return
   )
   return Order

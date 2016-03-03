@@ -38,6 +38,18 @@ module.exports.bootstrap = async (cb) => {
     let models = require('../api/db');
     global.db = models;
 
+    let Allpay = require('../api/services/AllpayService');
+    global.allpay = new Allpay({
+      merchantID: sails.config.allpay.merchantID,
+      hashKey: sails.config.allpay.hashKey,
+      hashIV: sails.config.allpay.hashIV,
+      debug: sails.config.allpay.debug,
+      prod: sails.config.environment === 'production',
+      ReturnURL: sails.config.allpay.ReturnURL,
+      ClientBackURL: sails.config.allpay.ClientBackURL,
+      PaymentInfoURL: sails.config.allpay.PaymentInfoURL
+    });
+
     let createInitData = true;
     if(sails.config.createInitData !== undefined) createInitData = sails.config.createInitData;
 
