@@ -157,6 +157,11 @@ module.exports.routes = {
   'get /shipping/:type' : 'ShippingController.type'
   # end shipping
 
+
+  # report
+  'get /admin/report/order' : 'ReportController.ordersReportPage'
+  # end report
+
   # print
   'get /print' : 'OrderController.print'
   # end print
