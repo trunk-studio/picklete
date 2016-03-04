@@ -51,5 +51,31 @@ module.exports = {
     catch(e) {
       console.error(e.stack);
     }
+  },
+
+  likeQuery: async (queryText) => {
+    try {
+      return {
+        'like': `%${queryText}%`
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
+  },
+
+  dateIntervalQuery: async (startDate, endDate) => {
+    try {
+      if(startDate.length && endDate.length){
+        console.log('uuuuuuuuuuuuuuuuuuuuuuuuu');
+        return { between : [new Date(startDate), new Date(endDate)]};
+      }else if(startDate || endDate) {
+        return startDate? { gte : new Date(startDate)}: { lte : new Date(endDate)};
+      }
+    } catch (e) {
+      console.error(e.stack);
+    }
   }
+
+
+
 }
