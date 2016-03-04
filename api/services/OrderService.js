@@ -556,6 +556,7 @@ var self = module.exports = {
           }, {
             model: db.OrderItem
           },
+          db.Allpay,
           db.Invoice
         ]
       };
@@ -563,6 +564,8 @@ var self = module.exports = {
 
       let [orders, ordersPaymentTotal] = await Promise.all([db.Order.findAndCountAll(queryObj), db.Order.sum('paymentTotalAmount', {where: orderConditionObj })]);
 
+
+      console.log('=======', JSON.stringify(orders,null,4));
       let result = {
         orders: orders,
         ordersPaymentTotal: ordersPaymentTotal
