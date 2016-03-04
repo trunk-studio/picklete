@@ -44,6 +44,36 @@ module.exports = {
     // console.log(JSON.stringify(reportData,null,4));
 
     return res.ok(reportData);
+  },
+
+  ordersReportPage: async (req, res) => {
+    try {
+      let query = req.query;
+      let page = req.session.UserController_controlMembers_page =
+      parseInt(req.param('page',
+        req.session.UserController_controlMembers_page || 0
+      ));
+
+      let limit = req.session.UserController_controlMembers_limit =
+      parseInt(req.param('limit',
+        req.session.UserController_controlMembers_limit || 10
+      ));
+
+      let queryResult = await OrderService.query(query, page, limit);
+
+      // console.log('-------query----------',JSON.stringify(queryResult.orders.rows,null,4));
+      // console.log('================ ================ ================');
+
+      return res.view('report/order',{
+        orders: queryResult.orders,
+        ordersPaymentTotal: queryResult.ordersPaymentTotal,
+        query,
+        page,
+        limit
+      });
+    } catch (error) {
+      return res.serverError(error);
+    }
   }
 
 };
