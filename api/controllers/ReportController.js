@@ -8,6 +8,7 @@ import fs from 'fs';
 import xlsx from 'node-xlsx';
 import _ from 'lodash';
 import moment from 'moment';
+import allPayPaymentTypeJson from '../../config/allpayPaymentType.json';
 
 module.exports = {
   export: async (req, res) => {
@@ -64,12 +65,16 @@ module.exports = {
       // console.log('-------query----------',JSON.stringify(queryResult.orders.rows,null,4));
       // console.log('================ ================ ================');
 
+      // console.log('------------------------------------');
+      // console.log(JSON.stringify(allPayPaymentTypeJson,null,4));
+
       return res.view('report/order',{
         orders: queryResult.orders,
         ordersPaymentTotal: queryResult.ordersPaymentTotal,
         query,
         page,
-        limit
+        limit,
+        allPayPaymentTypeJson
       });
     } catch (error) {
       return res.serverError(error);
