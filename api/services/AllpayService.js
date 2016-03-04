@@ -49,7 +49,7 @@ export default class Allpay {
     return data;
   };
 
-  async getAllpayConfig({orderId, MerchantTradeNo, tradeDesc, totalAmount, paymentMethod, itemArray, domain}){
+  async getAllpayConfig({relatedKeyValue, MerchantTradeNo, tradeDesc, totalAmount, paymentMethod, itemArray, domain}){
     let data = {
   		MerchantID: this.merchantID,
   		MerchantTradeNo: MerchantTradeNo,
@@ -64,7 +64,7 @@ export default class Allpay {
   		PaymentInfoURL: this.resolve(domain, this.PaymentInfoURL, true)
   	};
     let allpay = await this.Allpay.create({
-      OrderId: orderId,
+      ...relatedKeyValue,
       MerchantTradeNo: data.MerchantTradeNo,
       PaymentType: data.PaymentType
     });

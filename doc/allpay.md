@@ -43,17 +43,23 @@ let allpay = new Allpay({
   merchantID: 特店編號(MerchantID),
   hashKey: all in one 介接的 HashKey,
   hashIV: all in one 介接的 HashIV,
+
   // debug 用於 mocha test
   debug: true,
+
   // 需要用 allpay 測試後台要改為 true ， mocha test 改 false
   prod: process.env.NODE_ENV === 'production',
+
   // 付款結果通知 restful api，不需包含 domain
   ReturnURL: /allpay/paid,
+
   // 建立訂單後 [返回廠商]的按鈕的 redirect 網址，不需包含 domain
   ClientBackURL: /shop/done,
+
   // 訂單建立完成後 restful api，不需包含 domain
   PaymentInfoURL: /allpay/paymentinfo,
-  // 傳入 allpay 的 sequelize model 
+
+  // 傳入 allpay 的 sequelize model
   allpayModel: db.Allpay
 });
 ```
@@ -61,16 +67,24 @@ let allpay = new Allpay({
 ## 創建訂單
 ```
 let allpayConfig = await allpay.getAllpayConfig({
-  orderId: order.id,
+  
+  // 傳入跟 Allpay 建立關聯的 table column name & value
+  relatedKeyValue: { OrderId: order.id},
+
   // 訂單編號，注意不可重複
   MerchantTradeNo: '123123123',
+
   tradeDesc: '產品描述',
+
   // 產品總金額
   totalAmount: order.paymentTotalAmount,
+
   // 交易方法，目前僅支援 Credit/ATM
   paymentMethod: paymentMethod,
+
   // 物品名稱陣列
   itemArray: itemArray,
+  Â
   domain: 'http://localhost:1337',
 });
 

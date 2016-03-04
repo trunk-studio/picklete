@@ -51,26 +51,7 @@ describe("about Allpay service", function() {
     }
   });
 
-  it.skip('Create allpay aioCheckOut object', function() {
-    try {
-      var data = {
-				MerchantTradeNo: 'allpay20150830025',
-				TotalAmount: 500,
-				TradeDesc: 'Allpay push order test',
-				ItemName: ['Item01', 'Item02'],
-				ChoosePayment: {name: 'ATM'},
-				ReturnURL: 'http://localhost:3000',
-				ClientBackURL: 'http://localhost:3000'
-			};
-      allpay.aioCheckOut(data, function(obj){
-				console.log(obj);
-			});
-    } catch (e) {
-      console.log(e);
-    }
-  });
-
-  it('check gen checkValue', function() {
+  it('check gen checkValue', function(done) {
     try {
       let data = { MerchantID: '2000132',
         MerchantTradeNo: '200013244f273b61',
@@ -87,16 +68,19 @@ describe("about Allpay service", function() {
       let genData = allpay.genCheckMacValue(data);
       console.log(genData);
       genData.CheckMacValue.should.be.an.equal('A5C94058EB3AB5E11319F92F0D3D725B');
+      done()
     } catch (e) {
       sails.log.error(e)
       done(e)
     }
   });
 
-  it('check getAllpayConfig', async function() {
+  it('check getAllpayConfig', async function(done) {
     try {
       let data = {
-        orderId:order.id,
+        relatedKeyValue: {
+          OrderId: order.id
+        },
         MerchantTradeNo: '123',
         tradeDesc:'test gen config',
         totalAmount: 999,
@@ -107,16 +91,19 @@ describe("about Allpay service", function() {
       console.log(result);
       result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
       result.ChoosePayment.should.be.an.equal(data.paymentMethod)
+      done()
     } catch (e) {
       sails.log.error(e)
       done(e)
     }
   });
 
-  it('check getAllpayConfig paymentMethod = All', async function() {
+  it('check getAllpayConfig paymentMethod = All', async function(done) {
     try {
       let data = {
-        orderId:order.id,
+        relatedKeyValue: {
+          OrderId: order.id
+        },
         MerchantTradeNo: '123123',
         tradeDesc:'test gen config',
         totalAmount: 999
@@ -124,7 +111,8 @@ describe("about Allpay service", function() {
       let result = await allpay.getAllpayConfig(data);
       console.log(result);
       result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-      result.ChoosePayment.should.be.an.equal('ALL')
+      result.ChoosePayment.should.be.an.equal('ALL');
+      done()
     } catch (e) {
       sails.log.error(e)
       done(e)

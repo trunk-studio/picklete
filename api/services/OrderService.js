@@ -137,7 +137,9 @@ var self = module.exports = {
       });
 
       let data = await allpay.getAllpayConfig({
-        orderId: order.id,
+        relatedKeyValue: {
+          OrderId: order.id
+        },
         MerchantTradeNo: orderNo,
         tradeDesc: 'agricloud',
         totalAmount: order.paymentTotalAmount,
