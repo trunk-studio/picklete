@@ -493,81 +493,81 @@ var self = module.exports = {
 
     try {
       let queryObj = {};
-      let queryShipmentObj = {};
-      let queryUserObj = {};
+      let orderConditionObj = {},
+          userConditionObj = {},
+          shipmentConditionObj = {};
 
-        let queryCondition = {};
-        if(query.serialNumber)
-          queryCondition.serialNumber = { 'like': '%'+query.serialNumber+'%'};
+      if(query.orderCondition) {
+        if(query.orderCondition.serialNumber)
+          orderConditionObj.serialNumber = await UtilService.likeQuery(query.orderCondition.serialNumber);
         else
-          query.serialNumber = ''
+          query.orderCondition.serialNumber = ''
 
-        // if(query.keyword)
-        //   queryCondition.keyword = { 'like': '%'+query.keyword+'%'};
+        if(query.orderCondition.status != '0' && query.orderCondition.status )
+          orderConditionObj.status = query.orderCondition.status;
+        else
+          query.orderCondition.status = 0;
+      }
 
-        if(query.userName) {
-          queryUserObj.username = { 'like': '%'+query.userName+'%'};
+      if(query.orderConditionDate) {
+        let result = await UtilService.dateIntervalQuery(query.orderConditionDate.createdStart, query.orderConditionDate.createdEnd);
+        if(result) orderConditionObj.createdAt = result;
+      }
+
+      // if(query.keyword)
+      //   queryCondition.keyword = { 'like': '%'+query.keyword+'%'};
+      if(query.userCondition) {
+        if(query.userCondition.userName) {
+          userConditionObj.username = await UtilService.likeQuery(query.userCondition.userName);
         }else{
-          queryUserObj.username = { 'like': '%'};
-          query.username = ''
+          query.userCondition.username = ''
         }
-        if(query.status != '0' && query.status )
-          queryCondition.status = query.status;
-        else
-          query.status = 0;
+      }
 
+
+      if(query.shipmentCondition) {
         // if(query.shipmentNotify != '0' && query.shipmentNotify)
         //   queryCondition.shipmentNotify = query.shipmentNotify;
 
-        if(query.shippingMethod != '0' && query.shippingMethod){
-          if(query.shippingMethod == 1){
-            queryShipmentObj.shippingType = { 'like': 'postoffice'};
-          }else if(query.shippingMethod == 2){
-            queryShipmentObj.shippingType = { 'like': 'delivery'};
-          }
+        if(query.shipmentCondition.shippingType != '0' && query.shipmentCondition.shippingType){
+          shipmentConditionObj.shippingType = query.shipmentCondition.shippingType;
         }
 
-        if(query.addressee) {
-          queryShipmentObj.username = { 'like': '%'+query.addressee+'%'};
+        if(query.shipmentCondition.username) {
+          shipmentConditionObj.username = await UtilService.likeQuery(query.shipmentCondition.username);
         }else{
-          queryShipmentObj.username = { 'like': '%'};
-          query.username = ''
+          query.shipmentCondition.username = ''
         }
+      }
 
-        if(query.deliveryTimeTypeStart && query.deliveryTimeTypeEnd){
-          queryShipmentObj.deliveryTimeType = { between : [new Date(query.deliveryTimeTypeStart), new Date(query.deliveryTimeTypeEnd)]};
-        }else if(query.deliveryTimeTypeStart || query.deliveryTimeTypeEnd) {
-          queryShipmentObj.deliveryTimeType = query.deliveryTimeTypeStart? { gte : new Date(query.deliveryTimeTypeStart)}: { lte : new Date(query.deliveryTimeTypeEnd)};
-        }
+      if(query.shipmentConditionDate) {
+        let result = await UtilService.dateIntervalQuery(query.shipmentConditionDate.deliveryTimeTypeStart, query.shipmentConditionDate.deliveryTimeTypeEnd);
+        if(result) shipmentConditionObj.deliveryTimeType = result;
+      }
 
-        if(query.createdStart && query.createdEnd) {
-           queryCondition.createdAt = { between : [new Date(query.createdStart), new Date(query.createdEnd)]};
-        }else if(query.createdStart || query.createdEnd) {
-          queryCondition.createdAt = query.createdStart? { gte : new Date(query.createdStart)}: { lte : new Date(query.createdEnd)};
-        }
 
-        queryObj = {
-          where: queryCondition,
-          offset: page * limit,
-          limit: limit,
-          order: 'createdAt DESC',
-          include: [
-            {
-              model: db.User,
-              where:{
-                username: queryUserObj.username
-              }
-            }, {
-              model: db.Shipment,
-              where: queryShipmentObj
-            }, {
-              model: db.OrderItem
-            },
-            db.Invoice
-          ]
-        };
+      queryObj = {
+        where: orderConditionObj,
+        offset: page * limit,
+        limit: limit,
+        order: 'createdAt DESC',
+        include: [
+          {
+            model: db.User,
+            where: userConditionObj
 
-      let [orders, ordersPaymentTotal] = await Promise.all([db.Order.findAndCountAll(queryObj), db.Order.sum('paymentTotalAmount', {where: queryCondition })]);
+          }, {
+            model: db.Shipment,
+            where: shipmentConditionObj
+          }, {
+            model: db.OrderItem
+          },
+          db.Invoice
+        ]
+      };
+
+
+      let [orders, ordersPaymentTotal] = await Promise.all([db.Order.findAndCountAll(queryObj), db.Order.sum('paymentTotalAmount', {where: orderConditionObj })]);
 
       let result = {
         orders: orders,
