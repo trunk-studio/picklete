@@ -15,8 +15,7 @@ OrderController = {
   },
   index: async (req, res) => {
     try {
-      console.log('-------query----------',req.query);
-      console.log('================ ================ ================');
+
       let query = req.query;
       let page = req.session.UserController_controlMembers_page =
       parseInt(req.param('page',
