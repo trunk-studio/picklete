@@ -4,14 +4,17 @@ import dataRequest from 'request';
 import crypto from 'crypto';
 
 
-var Allpay = require('../../api/services/AllpayService');
-var _ = require('lodash');
-var allpay = new Allpay({
-  merchantID: sails.config.allpay.merchantID,
-  hashKey: sails.config.allpay.hashKey,
-  hashIV: sails.config.allpay.hashIV,
-  debug: sails.config.allpay.debug,
-});
+// var Allpay = require('./AllpayService');
+// var allpay = new Allpay({
+//   merchantID: sails.config.allpay.merchantID,
+//   hashKey: sails.config.allpay.hashKey,
+//   hashIV: sails.config.allpay.hashIV,
+//   debug: sails.config.allpay.debug,
+//   prod: sails.config.environment === 'production',
+//   ReturnURL: sails.config.allpay.ReturnURL,
+//   ClientBackURL: sails.config.allpay.ClientBackURL,
+//   PaymentInfoURL: sails.config.allpay.PaymentInfoURL
+// });
 
 var self = module.exports = {
   generateOrderSerialNumber: async () => {
@@ -103,10 +106,7 @@ var self = module.exports = {
 
   allPayCreate: async (order,paymentMethod) => {
     try {
-      var time = Date.now();
-      let domain = sails.config.domain || process.env.domain || 'http://localhost:1337';
       let orderNo;
-
       if (sails.config.environment === 'development' || sails.config.environment === 'test'|| sails.config.allpay.debug){
         var randomString = crypto.randomBytes(32).toString('hex').substr(0, 8);
         orderNo = sails.config.allpay.merchantID + randomString + order.id;
@@ -117,9 +117,6 @@ var self = module.exports = {
 
       //remember: keep TradeNo always sync in order object
       await self.update(order.id, {TradeNo: orderNo});
-
-      let data = await self.getAllpayConfig(
-        orderNo, time, order.paymentTotalAmount, paymentMethod);
 
       var itemArray = [];
       let orderItemProducts = await* order.OrderItems.map(async (orderItem) => {
@@ -139,7 +136,21 @@ var self = module.exports = {
         itemArray.push(`${order.orderItem.name}X${order.orderItem.quantity}`);
       });
 
-      data.ItemName = itemArray.join('#');
+      let data = await allpay.getAllpayConfig({
+        relatedKeyValue: {
+          OrderId: order.id
+        },
+        MerchantTradeNo: orderNo,
+        tradeDesc: 'agricloud',
+        totalAmount: order.paymentTotalAmount,
+        paymentMethod: paymentMethod,
+        itemArray,
+        domain: sails.config.domain,
+      });
+
+      return data;
+
+      // data.ItemName = itemArray.join('#');
 
       // let checkMacValue = await new Promise((done) => {
       //   dataRequest.post( {
@@ -150,11 +161,9 @@ var self = module.exports = {
     	// 		done(res.body);
     	// 	})
       // });
-      // console.log("!!!",checkMacValue);
 
-      var checkMacValue = allpay.genCheckMacValue(data);
-      data.CheckMacValue = checkMacValue;
-      return data;
+
+      // data = allpay.genCheckMacValue(data);
 
     } catch (e) {
       console.error(e.stack);
@@ -446,21 +455,6 @@ var self = module.exports = {
 
   },
 
-  getAllpayConfig: async (tradeNo, tradeDate, totalAmount, paymentMethod) => {
-  	return {
-  		MerchantID: sails.config.allpay.merchantID,
-  		MerchantTradeNo: tradeNo,
-  		MerchantTradeDate: sails.moment(tradeDate).format('YYYY/MM/DD HH:mm:ss'),
-  		PaymentType: 'aio',
-  		TotalAmount: totalAmount,
-  		TradeDesc: 'Allpay push order test',
-  		ItemName: '',
-  		ReturnURL: await UrlHelper.resolve(sails.config.allpay.ReturnURL, true),
-  		ChoosePayment: paymentMethod,
-  		ClientBackURL: await UrlHelper.resolve(sails.config.allpay.ClientBackURL, true) + '?t=' + tradeNo,
-  		PaymentInfoURL: await UrlHelper.resolve(sails.config.allpay.PaymentInfoURL, true)
-  	};
-  },
 
   update: async (orderId, data) => {
     let order = await db.Order.findById(orderId);

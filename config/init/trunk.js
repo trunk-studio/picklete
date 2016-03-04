@@ -304,8 +304,8 @@ module.exports.createTestData = async () => {
       "deliveryTime": "2015-12-23",
       "deliveryTimeShow": "2015-12-21 ~ 2015-12-23",
     },{
-      "deliveryTime": "2015-12-30",
-      "deliveryTimeShow": "2015-12-28 ~ 2015-12-30"
+      "deliveryTime": sails.moment().add(10,'day').format('YYYY-MM-DD'),
+      "deliveryTimeShow": `測試日期`
     }
   ];
 
