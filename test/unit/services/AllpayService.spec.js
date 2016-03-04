@@ -34,16 +34,6 @@ describe("about Allpay service", function() {
   			"OrderId": order.id
       })
 
-      await db.Allpay.create({
-  			"MerchantTradeNo": "sdkfsldfjkl23s",
-  			"OrderId": order.id
-      });
-
-      await db.Allpay.create({
-  			"MerchantTradeNo": "cavAsdasdasdasd",
-  			"OrderId": order.id
-      });
-
       done();
     } catch (e) {
       sails.log.error(e);
@@ -51,7 +41,7 @@ describe("about Allpay service", function() {
     }
   });
 
-  it('check gen checkValue', function(done) {
+  it('generator checkValue and return config', function(done) {
     try {
       let data = { MerchantID: '2000132',
         MerchantTradeNo: '200013244f273b61',
@@ -75,115 +65,142 @@ describe("about Allpay service", function() {
     }
   });
 
-  it('check getAllpayConfig', async function(done) {
-    try {
-      let data = {
-        relatedKeyValue: {
-          OrderId: order.id
-        },
-        MerchantTradeNo: '123',
-        tradeDesc:'test gen config',
-        totalAmount: 999,
-        paymentMethod: 'ATM',
-        itemArray: ['Item01', 'Item02'],
+
+  describe("first create allpay order use getAllpayConfig() generator allpay Config ", function() {
+
+    it('paymentMethod is ATM', async function(done) {
+      try {
+        let data = {
+          relatedKeyValue: {
+            OrderId: order.id
+          },
+          MerchantTradeNo: '123',
+          tradeDesc:'test gen config',
+          totalAmount: 999,
+          paymentMethod: 'ATM',
+          itemArray: ['Item01', 'Item02'],
+        }
+        let result = await allpay.getAllpayConfig(data);
+        console.log(result);
+        result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
+        result.ChoosePayment.should.be.an.equal(data.paymentMethod)
+        done()
+      } catch (e) {
+        sails.log.error(e)
+        done(e)
       }
-      let result = await allpay.getAllpayConfig(data);
-      console.log(result);
-      result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-      result.ChoosePayment.should.be.an.equal(data.paymentMethod)
-      done()
-    } catch (e) {
-      sails.log.error(e)
-      done(e)
-    }
-  });
+    });
 
-  it('check getAllpayConfig paymentMethod = All', async function(done) {
-    try {
-      let data = {
-        relatedKeyValue: {
-          OrderId: order.id
-        },
-        MerchantTradeNo: '123123',
-        tradeDesc:'test gen config',
-        totalAmount: 999
+    it('paymentMethod is All', async function(done) {
+      try {
+        let data = {
+          relatedKeyValue: {
+            OrderId: order.id
+          },
+          MerchantTradeNo: '123123',
+          tradeDesc:'test gen config',
+          totalAmount: 999
+        }
+        let result = await allpay.getAllpayConfig(data);
+        console.log(result);
+        result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
+        result.ChoosePayment.should.be.an.equal('ALL');
+        done()
+      } catch (e) {
+        sails.log.error(e)
+        done(e)
       }
-      let result = await allpay.getAllpayConfig(data);
-      console.log(result);
-      result.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-      result.ChoosePayment.should.be.an.equal('ALL');
-      done()
-    } catch (e) {
-      sails.log.error(e)
-      done(e)
-    }
+    });
   });
 
-  it('PaymentInfoURL allpay by ATM',async (done) => {
-    try {
-      let data = {
-        MerchantID : '123456789',
-        MerchantTradeNo : 'sdkfsldfjkl23s',
-        RtnCode : '2',
-        RtnMsg : 'Get VirtualAccount Succeeded',
-        TradeNo : 'sdkfsldfjkl23',
-        TradeAmt : 22000,
-        PaymentType : 'ATM_TAISHIN',
-        TradeDate : '2012/03/15 17:40:58',
-        CheckMacValue : '18196F5D22DB1D0E2B4858C2B1719F40',
-        BankCode: '812',
-        vAccount: '9103522175887271',
-        ExpireDate: '2013/12/16'
-      };
-      let result = await allpay.paymentinfo(data);
-      result.dataValues.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-      result.dataValues.RtnCode.should.be.an.equal(data.RtnCode);
-      result.dataValues.shouldTradeAmt.should.be.an.equal(data.TradeAmt);
-      result.dataValues.PaymentType.should.be.an.equal(data.PaymentType);
-      result.dataValues.BankCode.should.be.an.equal(data.BankCode);
-      result.dataValues.vAccount.should.be.an.equal(data.vAccount);
-      result.dataValues.ExpireDate.should.be.an.equal(data.ExpireDate);
-      done()
-    } catch (e) {
-      done(e)
-    }
+  describe("second if allpay order create success allpay will callback data , use paymentinfo() handle", function() {
+
+    before(async(done) => {
+      try {
+        await db.Allpay.create({
+    			"MerchantTradeNo": "sdkfsldfjkl23s",
+    			"OrderId": order.id
+        });
+
+        await db.Allpay.create({
+          "MerchantTradeNo": "cavAsdasdasdasd",
+          "OrderId": order.id
+        });
+        done()
+      } catch (e) {
+        sails.log.error(e);
+        done(e);
+      }
+    });
+
+    it('paymentMethod is ATM',async (done) => {
+      try {
+        let data = {
+          MerchantID : '123456789',
+          MerchantTradeNo : 'sdkfsldfjkl23s',
+          RtnCode : '2',
+          RtnMsg : 'Get VirtualAccount Succeeded',
+          TradeNo : 'sdkfsldfjkl23',
+          TradeAmt : 22000,
+          PaymentType : 'ATM_TAISHIN',
+          TradeDate : '2012/03/15 17:40:58',
+          CheckMacValue : '18196F5D22DB1D0E2B4858C2B1719F40',
+          BankCode: '812',
+          vAccount: '9103522175887271',
+          ExpireDate: '2013/12/16'
+        };
+        let result = await allpay.paymentinfo(data);
+        result.dataValues.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
+        result.dataValues.RtnCode.should.be.an.equal(data.RtnCode);
+        result.dataValues.ShouldTradeAmt.should.be.an.equal(data.TradeAmt);
+        result.dataValues.PaymentType.should.be.an.equal(data.PaymentType);
+        result.dataValues.BankCode.should.be.an.equal(data.BankCode);
+        result.dataValues.vAccount.should.be.an.equal(data.vAccount);
+        result.dataValues.ExpireDate.should.be.an.equal(data.ExpireDate);
+        done()
+      } catch (e) {
+        done(e)
+      }
+    });
+
+    it('paymentMethod is BARCODE', async (done) => {
+      try {
+        let data = {
+          MerchantID : '123456789',
+          MerchantTradeNo : 'cavAsdasdasdasd',
+          RtnCode : '2',
+          RtnMsg : 'Get VirtualAccount Succeeded',
+          TradeNo : 'cavAsdasdasdasd',
+          TradeAmt : 22000,
+          PaymentType : 'ATM_TAISHIN',
+          TradeDate : '2012/03/15 17:40:58',
+          CheckMacValue : '98AA8486E3D4CC3B80C6795C16CB74FB',
+          PaymentNo: 'GW130412257496',
+          ExpireDate: '2013/12/16 18:00:00',
+          Barcode1: '021030627',
+          Barcode2: '2470200001841540',
+          Barcode3: '103027000000100'
+        };
+        let result = await allpay.paymentinfo(data);
+        result.dataValues.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
+        result.dataValues.RtnCode.should.be.an.equal(data.RtnCode);
+        result.dataValues.ShouldTradeAmt.should.be.an.equal(data.TradeAmt);
+        result.dataValues.PaymentType.should.be.an.equal(data.PaymentType);
+        result.dataValues.PaymentNo.should.be.an.equal(data.PaymentNo);
+        result.dataValues.ExpireDate.should.be.an.equal(data.ExpireDate);
+        result.dataValues.Barcode1.should.be.an.equal(data.Barcode1);
+        result.dataValues.Barcode2.should.be.an.equal(data.Barcode2);
+        result.dataValues.Barcode2.should.be.an.equal(data.Barcode2);
+        done()
+      } catch (e) {
+        done(e)
+      }
+    });
+
   });
 
-  it('allpay PaymentInfoURL return post by CVS or BARCODE', async (done) => {
-    try {
-      let data = {
-        MerchantID : '123456789',
-        MerchantTradeNo : 'cavAsdasdasdasd',
-        RtnCode : '2',
-        RtnMsg : 'Get VirtualAccount Succeeded',
-        TradeNo : 'cavAsdasdasdasd',
-        TradeAmt : 22000,
-        PaymentType : 'ATM_TAISHIN',
-        TradeDate : '2012/03/15 17:40:58',
-        CheckMacValue : '98AA8486E3D4CC3B80C6795C16CB74FB',
-        PaymentNo: 'GW130412257496',
-        ExpireDate: '2013/12/16 18:00:00',
-        Barcode1: '021030627',
-        Barcode2: '2470200001841540',
-        Barcode3: '103027000000100'
-      };
-      let result = await allpay.paymentinfo(data);
-      result.dataValues.MerchantTradeNo.should.be.an.equal(data.MerchantTradeNo);
-      result.dataValues.RtnCode.should.be.an.equal(data.RtnCode);
-      result.dataValues.shouldTradeAmt.should.be.an.equal(data.TradeAmt);
-      result.dataValues.PaymentType.should.be.an.equal(data.PaymentType);
-      result.dataValues.PaymentNo.should.be.an.equal(data.PaymentNo);
-      result.dataValues.ExpireDate.should.be.an.equal(data.ExpireDate);
-      result.dataValues.Barcode1.should.be.an.equal(data.Barcode1);
-      result.dataValues.Barcode2.should.be.an.equal(data.Barcode2);
-      result.dataValues.Barcode2.should.be.an.equal(data.Barcode2);
-      done()
-    } catch (e) {
-      done(e)
-    }
-  });
 
-  it('paid allpay',async (done) => {
+  it('third user payment completed allpay will callback data , use paid() handle',async (done) => {
     try {
       let data = {
         MerchantID : '123456789',

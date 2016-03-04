@@ -26,7 +26,7 @@ let PaymentController = {
         ]
       });
       if(!order)
-        throw new Error(`${paid} 嚴重錯誤!!付款後找不到訂單!!`);
+        throw new Error(`${paid.OrderId} 嚴重錯誤!!付款後找不到訂單!!`);
 
       //  order 資料
       order.paymentIsConfirmed = true

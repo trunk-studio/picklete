@@ -79,7 +79,7 @@ export default class Allpay {
       allPayInfo.RtnMsg = callBackData.RtnMsg;
       allPayInfo.PaymentType = callBackData.PaymentType;
       allPayInfo.TradeDate = callBackData.TradeDate;
-      allPayInfo.shouldTradeAmt = callBackData.TradeAmt;
+      allPayInfo.ShouldTradeAmt = callBackData.TradeAmt;
       allPayInfo.ExpireDate = callBackData.ExpireDate;
 
       if(callBackData.BankCode){

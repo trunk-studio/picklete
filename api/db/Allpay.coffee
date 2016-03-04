@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) ->
   Allpay = sequelize.define('Allpay', {
     # 歐付寶
+    # 欄位名稱統一使用歐付寶回傳資料，所以不符合其他命名規則 
     # 訂單編號，提供給 allpay 使用
     # 訂單成立後更新的編號，由 allpay 提供
     TradeNo:
@@ -21,7 +22,7 @@ module.exports = (sequelize, DataTypes) ->
     # allpay 採用金流方式
     PaymentType: DataTypes.STRING
     # allpay 應該要收到的付款金額
-    shouldTradeAmt: DataTypes.FLOAT
+    ShouldTradeAmt: DataTypes.FLOAT
     # allpay 付款金額
     TradeAmt: DataTypes.FLOAT
     # allpay bankcode

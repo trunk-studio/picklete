@@ -13,7 +13,7 @@
   `PaymentDate` datetime DEFAULT NULL,
   `TradeDate` datetime DEFAULT NULL,
   `PaymentType` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `shouldTradeAmt` float DEFAULT NULL,
+  `ShouldTradeAmt` float DEFAULT NULL,
   `TradeAmt` float DEFAULT NULL,
   `BankCode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `vAccount` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
