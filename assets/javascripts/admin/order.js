@@ -1,5 +1,5 @@
 $(function() {
-  
+
   $('#order-query-limit').change(function() {
     location.href='/admin/order?limit='+$(this).val();
   });
@@ -50,5 +50,10 @@ $(function() {
     .fail(function () {
       alert("更新失敗，請重新嘗試");
     });
+  });
+
+  $("#collapse-order select").each(function(index, el) {
+      var selectedValue = $(el).attr("value");
+      $(el).val(selectedValue);
   });
 });
