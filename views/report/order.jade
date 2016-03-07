@@ -54,10 +54,11 @@ block body
           // /col-sm-1
           .col-sm-1.col-sm-1-lg 付款金額
           // /col-sm-1
-          .col-sm-2 付款方式
+          .col-sm-1 付款方式
           // /col-sm-1
           .col-sm-1 備註
           // /col-sm-2
+          .col-sm-1 訂單建立日期
         // /row
       // /p-10-20
       each order in orders.rows
@@ -78,10 +79,11 @@ block body
               // /col-sm-1
               .col-sm-1.col-sm-1-lg  #{order.Allpay.TradeAmt? `$ ${order.Allpay.TradeAmt}` : ''}
               // /col-sm-1
-              .col-sm-2 #{allPayPaymentTypeJson[order.Allpay.PaymentType]}
+              .col-sm-1 #{allPayPaymentTypeJson[order.Allpay.PaymentType]}
               // /col-sm-1
               .col-sm-1 #{order.description}
-              // /col-sm-2
+              // /col-sm-1
+              .col-sm-1 #{sails.moment(order.createdAt).format('YYYY/MM/DD')}
             // /row
           // /panel-heading
           //- .panel-collapse.collapse(aria-expanded='true', id='collapse-purchase-#{order.serialNumber}')
