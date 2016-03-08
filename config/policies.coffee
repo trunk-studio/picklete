@@ -82,6 +82,9 @@ module.exports.policies = {
   'ShopCodeController':
     checkCode: ['global']
 
+  'ReportController':
+    ordersReportData: []
+
   # #'/api/search/*': []
   # SearchController:
   #   products: []

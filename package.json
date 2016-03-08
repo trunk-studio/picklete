@@ -63,6 +63,7 @@
   },
   "scripts": {
     "start": "node_modules/.bin/coffee app.coffee",
+    "test" : "node_modules/.bin/mocha test",
     "build": "compass compile && node_modules/.bin/grunt",
     "watch": "parallelshell 'npm run watch:compass' 'npm run watch:livereload' 'npm run watch:coffee'",
     "watch:compass": "compass watch",

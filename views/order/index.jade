@@ -22,54 +22,54 @@ block body
             .form-group
               label.col-md-4.control-label 訂單編號
               .col-md-8
-                input.form-control(type='text',name='serialNumber', value = query.serialNumber)
+                input.form-control(type='text',name='orderCondition[serialNumber]', value = query.orderCondition? query.orderCondition.serialNumber : null)
             // /form-group
           // /col-md-4
           .col-md-4
             .form-group
               label.col-md-4.control-label 運送方式
               .col-md-8
-                select.form-control(name='shippingMethod', value = query.shippingMethod)
-                  option(value=0, selected="true", disabled='disabled') 選擇狀態
-                  option(value=1) 郵局
-                  option(value=2) 宅配
+                select.form-control(name='shipmentCondition[shippingType]', value = query.shipmentCondition? query.shipmentCondition.shippingType: 0)
+                  option(value=0) 選擇狀態
+                  option(value='postoffice') 郵局
+                  option(value='delivery') 宅配
             // /form-group
           // /col-md-4
-          .col-md-4
-            .form-group
-              label.col-md-4.control-label 關鍵字
-              .col-md-8
-                input.form-control(type='text', name='keyword', value = query.keyword?query.keyword: '')
-            // /form-group
-          // /col-md-4
+          //- .col-md-4
+          //-   .form-group
+          //-     label.col-md-4.control-label 關鍵字
+          //-     .col-md-8
+          //-       input.form-control(disabled="disabled" type='text', name='keyword', value = query.keyword?query.keyword: null)
+          //-   // /form-group
+          //- // /col-md-4
         // /row
         .row.row-m
           .col-md-4
             .form-group
               label.col-md-4.control-label 購買人
               .col-md-8
-                input.form-control(type='text', name='userName', value = query.userName)
+                input.form-control(type='text', name='userCondition[userName]', value = query.userCondition? query.userCondition.userName: null)
             // /form-group
           // /col-md-4
           .col-md-4
             .form-group
               label.col-md-4.control-label 付款狀態
               .col-md-8
-                select.form-control(name='status', value = query.status?query.status: 0)
-                  option(value='0') 選擇狀態
+                select.form-control(name='orderCondition[status]', value = query.orderCondition?query.orderCondition.status: 0)
+                  option(value=0) 選擇狀態
                   option(value='new') 訂單確認中
                   option(value='paymentConfirm') 已收到付款
                   option(value='deliveryConfirm') 已出貨
             // /form-group
           // /col-md-4
-          .col-md-4
-            .form-group
-              label.col-md-4.control-label 出貨通知
-              .col-md-8
-                select.form-control(name='shipmentNotify', value = query.shipmentNotify?query.shipmentNotify: 0)
-                  option(value=0) 選擇狀態
-                  option(value='deliveryConfirm') 已出貨
-                  option(value=0) 未出貨
+          //- .col-md-4
+          //-   .form-group
+          //-     label.col-md-4.control-label 出貨通知
+          //-     .col-md-8
+          //-       select.form-control(disabled="disabled" name='shipmentNotify', value = query? query.shipmentNotify: 0)
+          //-         option(value=0) 選擇狀態
+          //-         option(value='deliveryConfirm') 已出貨
+          //-         option(value=0) 未出貨
             // /form-group
           // /col-md-4
         // /row
@@ -78,7 +78,7 @@ block body
             .form-group
               label.col-md-4.control-label 收件人
               .col-md-8
-                input.form-control(type='text', name='addressee', value = query.addressee)
+                input.form-control(type='text', name='shipmentCondition[username]', value = query.shipmentCondition? query.shipmentCondition.username: null)
             // /form-group
           // /col-md-4
 
@@ -86,14 +86,14 @@ block body
             .form-group
               label.col-md-4.control-label 訂單日期
               .col-md-8
-                input.form-control(type='date', placeholder="2015-10-30", name='createdStart', value = query.createdStart?query.createdStart: null)
+                input.form-control(type='date', placeholder="2015-10-30", name='orderConditionDate[createdStart]', value = query.orderConditionDate? query.orderConditionDate.createdStart: null)
             // /form-group
           // /col-md-4
           .col-md-4
             .form-group
               label.col-md-4.control-label.text-center #{i18n('until')}
               .col-md-8
-                input.form-control(type='date', placeholder="2015-10-30", name='createdEnd', value = query.createdEnd?query.createdEnd: null)
+                input.form-control(type='date', placeholder="2015-10-30", name='orderConditionDate[createdEnd]', value = query.orderConditionDate? query.orderConditionDate.createdEnd: null)
                 input(type='hidden', name='page' value = query.page?query.page: 0)
             // /form-group
           // /col-md-4
@@ -105,19 +105,19 @@ block body
             .form-group
               label.col-md-4.control-label 預計出貨日
               .col-md-8
-                input.form-control(type='date', placeholder="2015-10-30", name='deliveryTimeTypeStart', value = query.deliveryTimeTypeStart?query.deliveryTimeTypeStart: null)
+                input.form-control(type='date', placeholder="2015-10-30", name='shipmentConditionDate[deliveryTimeTypeStart]', value = query.shipmentConditionDate? query.shipmentConditionDate.deliveryTimeTypeStart: null)
             // /form-group
           // /col-md-4
           .col-md-4
             .form-group
               label.col-md-4.control-label.text-center #{i18n('until')}
               .col-md-8
-                input.form-control(type='date', placeholder="2015-10-30", name='deliveryTimeTypeEnd', value = query.deliveryTimeTypeEnd?query.deliveryTimeTypeEnd: null)
+                input.form-control(type='date', placeholder="2015-10-30", name='shipmentConditionDate[deliveryTimeTypeEnd]', value = query.shipmentConditionDate? query.shipmentConditionDate.deliveryTimeTypeEnd: null)
             // /form-group
           // /col-md-4
           // /col-md-8
           .col-md-12.text-right
-            a.btn.btn-primary(onClick='$("form[name=\'searchOrders\']").submit()') 查詢
+            a.btn.btn-primary(onClick='$("form[name=\'searchOrders\']").attr("action","order").attr("target, "_self").submit()') 查詢
           // /col-md-12
         // /row
       // /form-horizontal
@@ -145,6 +145,11 @@ block body
 
   // order-list
   hr.dashed-line
+  .row
+    .col-md-6
+      h2 查詢結果總額： $#{ordersPaymentTotal} 
+    .col-md-6(style={'text-align': 'right'})
+      a.btn.btn-primary(onClick='$("form[name=\'searchOrders\']").attr("action","report/order").attr("target", "_blank").submit()') Report
   #collapse-purchase.panel-group(role='tablist', aria-multiselectable='true')
     .p-10-20
       .row.row-s.text-center.font-size-base

@@ -452,7 +452,6 @@ var self = module.exports = {
       throw e;
     }
 
-
   },
 
 
@@ -482,5 +481,104 @@ var self = module.exports = {
     let result = `${years}${alphabet[month]}${alphabet[day]}`;
 
     return result;
+  },
+
+  query: async (query, page = 0 , limit = 0) => {
+
+    try {
+      let queryObj = {};
+      let orderConditionObj = {},
+          userConditionObj = {},
+          shipmentConditionObj = {};
+
+      if(query.orderCondition) {
+        if(query.orderCondition.serialNumber)
+          orderConditionObj.serialNumber = await UtilService.likeQuery(query.orderCondition.serialNumber);
+        else
+          query.orderCondition.serialNumber = ''
+
+        if(query.orderCondition.status != '0' && query.orderCondition.status )
+          orderConditionObj.status = query.orderCondition.status;
+        else
+          query.orderCondition.status = 0;
+      }
+
+      if(query.orderConditionDate) {
+        let result = await UtilService.dateIntervalQuery(query.orderConditionDate.createdStart, query.orderConditionDate.createdEnd);
+        if(result) orderConditionObj.createdAt = result;
+      }
+
+      // if(query.keyword)
+      //   queryCondition.keyword = { 'like': '%'+query.keyword+'%'};
+      if(query.userCondition) {
+        if(query.userCondition.userName) {
+          userConditionObj.username = await UtilService.likeQuery(query.userCondition.userName);
+        }else{
+          query.userCondition.username = ''
+        }
+      }
+
+
+      if(query.shipmentCondition) {
+        // if(query.shipmentNotify != '0' && query.shipmentNotify)
+        //   queryCondition.shipmentNotify = query.shipmentNotify;
+
+        if(query.shipmentCondition.shippingType != '0' && query.shipmentCondition.shippingType){
+          shipmentConditionObj.shippingType = query.shipmentCondition.shippingType;
+        }
+
+        if(query.shipmentCondition.username) {
+          shipmentConditionObj.username = await UtilService.likeQuery(query.shipmentCondition.username);
+        }else{
+          query.shipmentCondition.username = ''
+        }
+      }
+
+      if(query.shipmentConditionDate) {
+        let result = await UtilService.dateIntervalQuery(query.shipmentConditionDate.deliveryTimeTypeStart, query.shipmentConditionDate.deliveryTimeTypeEnd);
+        if(result) shipmentConditionObj.deliveryTimeType = result;
+      }
+
+
+      queryObj = {
+        where: orderConditionObj,
+        offset: page * limit,
+        limit: limit,
+        order: 'createdAt DESC',
+        include: [
+          {
+            model: db.User,
+            where: userConditionObj
+
+          }, {
+            model: db.Shipment,
+            where: shipmentConditionObj
+          }, {
+            model: db.OrderItem
+          },
+          db.Allpay,
+          db.Invoice
+        ]
+      };
+
+
+      let [orders, ordersPaymentTotal] = await Promise.all([db.Order.findAndCountAll(queryObj), db.Order.sum('paymentTotalAmount', {where: orderConditionObj })]);
+
+
+      console.log('=======', JSON.stringify(orders,null,4));
+      let result = {
+        orders: orders,
+        ordersPaymentTotal: ordersPaymentTotal
+      }
+
+      return result
+
+    } catch (e) {
+      throw e;
+    }
   }
+
+
+
+
 }

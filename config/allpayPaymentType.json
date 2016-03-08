@@ -1,0 +1,42 @@
+{
+  "aio": "訂單建立中...",
+  "WebATM_TAISHIN": "台新銀行 WebATM",
+  "WebATM_ESUN": "玉山銀行 WebATM",
+  "WebATM_HUANAN": "華南銀行 WebATM",
+  "WebATM_BOT": "台灣銀行 WebATM",
+  "WebATM_FUBON": "台北富邦 WebATM",
+  "WebATM_CHINATRUST": "中國信託 WebATM",
+  "WebATM_FIRST": "第一銀行 WebATM",
+  "WebATM_CATHAY": "國泰世華 WebATM",
+  "WebATM_MEGA": "兆豐銀行 WebATM",
+  "WebATM_YUANTA": "元大銀行 WebATM",
+
+  "WebATM_LAND": "土地銀行 WebATM",
+
+  "ATM_TAISHIN": "台新銀行 ATM",
+
+  "ATM_ESUN": "玉山銀行 ATM",
+  "ATM_HUANAN": "華南銀行 ATM",
+  "ATM_BOT": "台灣銀行 ATM",
+
+  "ATM_FUBON": "台北富邦 ATM",
+  "ATM_CHINATRUST": "中國信託 ATM",
+
+  "ATM_FIRST": "第一銀行 ATM",
+
+  "CVS_CVS": "超商代碼繳款",
+
+  "CVS_OK": "OK 超商代碼繳款",
+
+  "CVS_FAMILY": "全家超商代碼繳款",
+
+  "CVS_HILIFE": "萊爾富超商代碼繳款",
+  "CVS_IBON": "7-11 ibon 代碼繳款",
+  "BARCODE_BARCODE": "超商條碼繳款",
+  "Alipay_Alipay": "支付寶",
+  "Tenpay_Tenpay": "財付通",
+
+  "Credit_CreditCard": "信用卡",
+  "TopUpUsed_AllPay": "儲值/餘額消費_歐付寶",
+  "TopUpUsed_ESUN": "儲值/餘額消費_玉山銀行"
+}
