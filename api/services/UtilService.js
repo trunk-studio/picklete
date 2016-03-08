@@ -66,7 +66,6 @@ module.exports = {
   dateIntervalQuery: async (startDate, endDate) => {
     try {
       if(startDate.length && endDate.length){
-        console.log('uuuuuuuuuuuuuuuuuuuuuuuuu');
         return { between : [new Date(startDate), new Date(endDate)]};
       }else if(startDate || endDate) {
         return startDate? { gte : new Date(startDate)}: { lte : new Date(endDate)};
